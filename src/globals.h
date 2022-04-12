@@ -34,10 +34,19 @@ struct JoystickKeymap
 {
   int a_button;
   int b_button;
+  int x_button;
+  int y_button;
   int start_button;
+  int c_button;
+  int d_button;
+  int z_button;
 
   int x_axis;
   int y_axis;
+  int r_trigger;
+  int l_trigger;
+  int x_axis2;
+  int y_axis2;
   
   int dead_zone;
 
