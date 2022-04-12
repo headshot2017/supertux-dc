@@ -377,32 +377,10 @@ GameSession::process_events()
                   break;
 		
 		case SDL_JOYHATMOTION:
-		  if ((event.jhat.value == SDL_HAT_RIGHT) || 
-		      (event.jhat.value == SDL_HAT_RIGHTUP) ){
-			tux.input.left  = UP;
-			tux.input.right = DOWN;
-		  }
-		  if ((event.jhat.value == SDL_HAT_LEFT) ||
-		      (event.jhat.value == SDL_HAT_LEFTUP) ){
-			tux.input.left  = DOWN;
-			tux.input.right = UP;
-		  }
-		  if (event.jhat.value == SDL_HAT_CENTERED) {
-                  tux.input.left  = UP;
-			tux.input.right = UP;
-              }
-		 
-		  if ( (event.jhat.value ==  ( SDL_HAT_DOWN)) ||
-		       (event.jhat.value ==  ( SDL_HAT_LEFTDOWN)) ||
-		       (event.jhat.value ==  ( SDL_HAT_RIGHTDOWN)) )
-			 tux.input.down = DOWN;
-
-		  if ((event.jhat.value != ( SDL_HAT_DOWN)) && 
-                      (event.jhat.value != ( SDL_HAT_LEFTDOWN)) &&
-                      (event.jhat.value != ( SDL_HAT_RIGHTDOWN)))
-			 tux.input.down = UP;
-                           
-                  break;
+              tux.input.left = (event.jhat.value == SDL_HAT_LEFT || event.jhat.value == SDL_HAT_LEFTUP || event.jhat.value == SDL_HAT_LEFTDOWN);
+              tux.input.right = (event.jhat.value == SDL_HAT_RIGHT || event.jhat.value == SDL_HAT_RIGHTUP || event.jhat.value == SDL_HAT_RIGHTDOWN);
+              tux.input.down = (event.jhat.value == SDL_HAT_DOWN || event.jhat.value == SDL_HAT_LEFTDOWN || event.jhat.value == SDL_HAT_RIGHTDOWN);        
+              break;
 
 
                 case SDL_JOYAXISMOTION:
@@ -428,25 +406,23 @@ GameSession::process_events()
                     {
                       if (event.jaxis.value > joystick_keymap.dead_zone)
                         tux.input.down = DOWN;
-                      else if (event.jaxis.value < -joystick_keymap.dead_zone)
-                        tux.input.down = UP;
                       else
                         tux.input.down = UP;
                     }
                   break;
             
                 case SDL_JOYBUTTONDOWN:
-                  if (event.jbutton.button == joystick_keymap.a_button)
+                  if (event.jbutton.button == joystick_keymap.x_button || event.jbutton.button == joystick_keymap.y_button)
                     tux.input.up = DOWN;
-                  else if (event.jbutton.button == joystick_keymap.b_button)
+                  else if (event.jbutton.button == joystick_keymap.a_button || event.jbutton.button == joystick_keymap.b_button)
                     tux.input.fire = DOWN;
                   else if (event.jbutton.button == joystick_keymap.start_button)
                     on_escape_press();
                   break;
                 case SDL_JOYBUTTONUP:
-                  if (event.jbutton.button == joystick_keymap.a_button)
+                  if (event.jbutton.button == joystick_keymap.x_button || event.jbutton.button == joystick_keymap.y_button)
                     tux.input.up = UP;
-                  else if (event.jbutton.button == joystick_keymap.b_button)
+                  else if (event.jbutton.button == joystick_keymap.a_button || event.jbutton.button == joystick_keymap.b_button)
                     tux.input.fire = UP;
                   break;
 
@@ -543,7 +519,7 @@ GameSession::draw()
   if(Menu::current())
     {
       Menu::current()->draw();
-      mouse_cursor->draw();
+      //mouse_cursor->draw();
     }
 
   updatescreen();
