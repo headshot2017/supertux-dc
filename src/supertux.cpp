@@ -46,6 +46,7 @@ int main(int argc, char * argv[])
   // get a loading screen up and running quickly because this will take a while
   st_video_setup();
   st_general_setup();
+  SDL_ShowCursor(false);
   fadeout();
 
   st_audio_setup();
