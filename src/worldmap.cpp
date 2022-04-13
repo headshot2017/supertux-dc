@@ -621,7 +621,7 @@ WorldMap::get_input()
 	      break;
 
             case SDL_JOYBUTTONDOWN:
-              if (event.jbutton.button == joystick_keymap.b_button)
+              if (event.jbutton.button == joystick_keymap.a_button)
                 enter_level = true;
               else if (event.jbutton.button == joystick_keymap.start_button)
                 on_escape_press();
