@@ -28,6 +28,7 @@
 #include <string.h>
 #include <assert.h>
 
+#include "configfile.h"
 #include "defines.h"
 #include "globals.h"
 #include "menu.h"
@@ -416,6 +417,8 @@ Menu::action()
           action();
           break;
 
+        case MN_BACKSAVE:
+          saveconfig();
         case MN_BACK:
           Menu::pop_current();
           break;
@@ -617,6 +620,7 @@ Menu::draw_item(int index, // Position of the current item in the menu
                             A_HMIDDLE, A_VMIDDLE, shadow_size);
       break;
     }
+  case MN_BACKSAVE:
   case MN_BACK:
     {
       text_font->draw_align(pitem.text, x_pos, y_pos, A_HMIDDLE, A_VMIDDLE, shadow_size);
