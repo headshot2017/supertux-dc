@@ -394,7 +394,7 @@ void title(void)
 
                 if(confirm_dialog(str))
                   {
-                  sprintf(str,"%s/slot%d.stsg", st_save_dir, slot);
+                  sprintf(str,"%s/STSLOT%d", st_save_dir, slot);
                   printf("Removing: %s\n",str);
                   remove(str);
                   }
@@ -405,11 +405,8 @@ void title(void)
                 }
               else if (process_load_game_menu())
                 {
-                  printf("done, load demo\n");
                   createDemo();
-                  printf("loaded demo, load sounds\n");
                   loadsounds();
-                  printf("loaded sounds!!\n");
                   // FIXME: shouldn't be needed if GameSession doesn't relay on global variables
                   // reset tux
                   scroll_x = 0;
