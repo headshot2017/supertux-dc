@@ -32,7 +32,7 @@ const char * config_filename = "/st_config.dat";
 const char * config_filename = "/STUXCONF";
 #endif
 
-static void defaults ()
+void defaults ()
 {
   /* Set defaults: */
   debug_mode = false;

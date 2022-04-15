@@ -20,6 +20,7 @@
 #ifndef SUPERTUX_CONFIGFILE_H
 #define SUPERTUX_CONFIGFILE_H
 
+void defaults();
 void loadconfig (void);
 void saveconfig (void);
 
