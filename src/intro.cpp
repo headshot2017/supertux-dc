@@ -39,7 +39,6 @@ void draw_intro()
 if(debug_mode)
   fade("/images/background/arctis2.jpg", 30, false);
 
-printf("display intro text\n");
 display_text_file("intro.txt", getSession()->get_level()->img_bkgd, SCROLL_SPEED_MESSAGE);
 }
 
