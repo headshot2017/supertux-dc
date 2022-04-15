@@ -18,10 +18,12 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <iostream>
-#include <fstream>
+#include <sstream>
 #include <vector>
 #include <assert.h>
 #include <unistd.h>
+
+#include "dreamcast.h"
 #include "globals.h"
 #include "texture.h"
 #include "screen.h"
@@ -1032,7 +1034,7 @@ void
 WorldMap::savegame(const std::string& filename)
 {
   std::cout << "savegame: " << filename << std::endl;
-  std::ofstream out(filename.c_str());
+  std::stringstream out;
 
   int nb_solved_levels = 0;
   for(Levels::iterator i = levels.begin(); i != levels.end(); ++i)
@@ -1063,6 +1065,12 @@ WorldMap::savegame(const std::string& filename)
 
   out << "   )\n"
       << " )\n\n;; EOF ;;" << std::endl;
+
+  FILE* f = fopen(filename.c_str(), "w");
+  char desc[128];
+  sprintf(desc, "Icyisland - %d/%d", nb_solved_levels, levels.size());
+  saveToVMU(f, out.str().c_str(), desc);
+  fclose(f);
 }
 
 void
@@ -1071,10 +1079,22 @@ WorldMap::loadgame(const std::string& filename)
   std::cout << "loadgame: " << filename << std::endl;
   savegame_file = filename;
 
-  if (!faccessible(filename.c_str()))
+  FILE* file = fopen(filename.c_str(), "r");
+  if (!file)
     return;
-  
-  lisp_object_t* savegame = lisp_read_from_file(filename);
+
+  // Dreamcast: parse VMU data
+  vmu_pkg_t pkg = loadFromVMU(file);
+  fclose(file);
+
+  file = fmemopen((char*)pkg.data, (size_t)pkg.data_len, "r");
+
+  // read slot file
+  lisp_stream_t stream;
+
+  lisp_stream_init_file(&stream, file);
+  lisp_object_t* savegame = lisp_read(&stream);
+
   if (!savegame)
     {
       std::cout << "WorldMap:loadgame: File not found: " << filename << std::endl;
@@ -1143,6 +1163,7 @@ WorldMap::loadgame(const std::string& filename)
     }
  
   lisp_free(savegame);
+  fclose(file);
 }
 
 void

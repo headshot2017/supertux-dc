@@ -24,11 +24,12 @@
 #include "globals.h"
 #include "lispreader.h"
 #include "player.h"
+#include "dreamcast.h"
 
 #ifdef WIN32
 const char * config_filename = "/st_config.dat";
 #else
-const char * config_filename = "/config";
+const char * config_filename = "/STUXCONF";
 #endif
 
 static void defaults ()
@@ -57,6 +58,12 @@ void loadconfig(void)
 
   if (file == NULL)
     return;
+
+  // Dreamcast: parse VMU data
+  vmu_pkg_t pkg = loadFromVMU(file);
+  fclose(file);
+
+  file = fmemopen((char*)pkg.data, (size_t)pkg.data_len, "r");
 
   /* read config file */
 
@@ -117,33 +124,34 @@ void saveconfig (void)
 
   if(config)
     {
-      fprintf(config, "(supertux-config\n");
-      fprintf(config, "\t;; the following options can be set to #t or #f:\n");
-      fprintf(config, "\t(fullscreen %s)\n", use_fullscreen ? "#t" : "#f");
-      fprintf(config, "\t(sound      %s)\n", use_sound      ? "#t" : "#f");
-      fprintf(config, "\t(music      %s)\n", use_music      ? "#t" : "#f");
-      fprintf(config, "\t(show_fps   %s)\n", show_fps       ? "#t" : "#f");
+      // multi-line? cry about it
+      char data[4096];
+      sprintf(data, "(supertux-config\n\
+\t;; the following options can be set to #t or #f:\n\
+\t(fullscreen %s)\n\
+\t(sound      %s)\n\
+\t(music      %s)\n\
+\t(show_fps   %s)\n\
+\n\
+\t;; either \"opengl\" or \"sdl\"\n\
+\t(video      \"%s\")\n\
+\n\
+\t;; joystick number (-1 means no joystick):\n\
+\t(joystick   %d)\n\
+\t(joystick-x   %d)\n\
+\t(joystick-y   %d)\n\
+\t(joystick-a   %d)\n\
+\t(joystick-b   %d)\n\
+\t(joystick-start  %d)\n\
+\t(joystick-deadzone  %d)\n\
+\t(keyboard-jump  %d)\n\
+\t(keyboard-duck  %d)\n\
+\t(keyboard-left  %d)\n\
+\t(keyboard-right %d)\n\
+\t(keyboard-fire  %d)\n\
+)\n", use_fullscreen ? "#t" : "#f", use_sound ? "#t" : "#f", use_music ? "#t" : "#f", show_fps ? "#t" : "#f", use_gl ? "opengl" : "sdl", use_joystick ? joystick_num : -1, joystick_keymap.x_axis, joystick_keymap.y_axis, joystick_keymap.a_button, joystick_keymap.b_button, joystick_keymap.start_button, joystick_keymap.dead_zone, keymap.jump, keymap.duck, keymap.left, keymap.right, keymap.fire);
 
-      fprintf(config, "\n\t;; either \"opengl\" or \"sdl\"\n");
-      fprintf(config, "\t(video      \"%s\")\n", use_gl ? "opengl" : "sdl");
-
-      fprintf(config, "\n\t;; joystick number (-1 means no joystick):\n");
-      fprintf(config, "\t(joystick   %d)\n", use_joystick ? joystick_num : -1);
-
-      fprintf(config, "\t(joystick-x   %d)\n", joystick_keymap.x_axis);
-      fprintf(config, "\t(joystick-y   %d)\n", joystick_keymap.y_axis);
-      fprintf(config, "\t(joystick-a   %d)\n", joystick_keymap.a_button);
-      fprintf(config, "\t(joystick-b   %d)\n", joystick_keymap.b_button);
-      fprintf(config, "\t(joystick-start  %d)\n", joystick_keymap.start_button);
-      fprintf(config, "\t(joystick-deadzone  %d)\n", joystick_keymap.dead_zone);
-
-      fprintf(config, "\t(keyboard-jump  %d)\n", keymap.jump);
-      fprintf(config, "\t(keyboard-duck  %d)\n", keymap.duck);
-      fprintf(config, "\t(keyboard-left  %d)\n", keymap.left);
-      fprintf(config, "\t(keyboard-right %d)\n", keymap.right);
-      fprintf(config, "\t(keyboard-fire  %d)\n", keymap.fire);
-
-      fprintf(config, ")\n");
+      saveToVMU(config, data, "Game configuration");
 
       fclose(config);
     }

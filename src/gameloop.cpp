@@ -30,6 +30,7 @@
 #include <math.h>
 #include <time.h>
 #include <SDL.h>
+#include <kos.h>
 
 #ifndef WIN32
 #include <sys/types.h>
@@ -37,6 +38,7 @@
 #endif
 
 #include "defines.h"
+#include "dreamcast.h"
 #include "globals.h"
 #include "gameloop.h"
 #include "screen.h"
@@ -777,17 +779,37 @@ std::string slotinfo(int slot)
   char tmp[1024];
   char slotfile[1024];
   std::string title;
-  sprintf(slotfile,"%s/slot%d.stsg",st_save_dir,slot);
+  sprintf(slotfile,"%s/STSLOT%d",st_save_dir,slot);
 
-  lisp_object_t* savegame = lisp_read_from_file(slotfile);
+  FILE* file = fopen(slotfile, "r");
+
+  bool opened = false;
+  lisp_object_t* savegame = NULL;
+  if (file)
+  {
+      opened = true;
+      // Dreamcast: parse VMU data
+      vmu_pkg_t pkg = loadFromVMU(file);
+      fclose(file);
+
+      file = fmemopen((char*)pkg.data, (size_t)pkg.data_len, "r");
+
+      // read slot file
+      lisp_stream_t stream;
+
+      lisp_stream_init_file(&stream, file);
+      savegame = lisp_read(&stream);
+  }
+
   if (savegame)
     {
       LispReader reader(lisp_cdr(savegame));
       reader.read_string("title", &title);
       lisp_free(savegame);
+      fclose(file);
     }
 
-  if (faccessible(slotfile))
+  if (opened)
     {
       if (!title.empty())
         snprintf(tmp,1024,"Slot %d - %s",slot, title.c_str());

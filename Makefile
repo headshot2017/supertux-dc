@@ -10,7 +10,7 @@ CXXFLAGS += -DNOOPENGL -I$(KOS_BASE)/addons/include -I$(KOS_PORTS)/include/SDL
 
 # List all of your C files here, but change the extension to ".o"
 # Include "romdisk.o" if you want a rom disk.
-OBJS = src/badguy.o src/bitmask.o src/button.o src/collision.o src/configfile.o src/gameloop.o src/gameobjs.o src/globals.o src/high_scores.o src/intro.o src/level.o src/leveleditor.o src/lispreader.o src/menu.o src/mousecursor.o src/music_manager.o src/musicref.o src/particlesystem.o src/physic.o src/player.o src/resources.o src/scene.o src/screen.o src/setup.o src/sound.o src/special.o src/sprite.o src/sprite_manager.o src/supertux.o src/text.o src/texture.o src/tile.o src/timer.o src/title.o src/type.o src/world.o src/worldmap.o
+OBJS = src/badguy.o src/bitmask.o src/button.o src/collision.o src/configfile.o src/dreamcast.o src/gameloop.o src/gameobjs.o src/globals.o src/high_scores.o src/intro.o src/level.o src/leveleditor.o src/lispreader.o src/menu.o src/mousecursor.o src/music_manager.o src/musicref.o src/particlesystem.o src/physic.o src/player.o src/resources.o src/scene.o src/screen.o src/setup.o src/sound.o src/special.o src/sprite.o src/sprite_manager.o src/supertux.o src/text.o src/texture.o src/tile.o src/timer.o src/title.o src/type.o src/world.o src/worldmap.o
 
 # If you define this, the Makefile.rules will create a romdisk.o for you
 # from the named dir.

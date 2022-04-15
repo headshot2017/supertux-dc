@@ -76,6 +76,15 @@ void usage(char * prog, int ret);
 /* Does the given file exist and is it accessible? */
 int faccessible(const char *filename)
 {
+  FILE* f = fopen(filename, "r");
+  if (f)
+  {
+      fclose(f);
+      return true;
+  }
+  return false;
+
+  /*
   struct stat filestat;
   if (stat(filename, &filestat) == -1)
     {
@@ -88,6 +97,7 @@ int faccessible(const char *filename)
       else
         return false;
     }
+  */
 }
 
 /* Can we write to this location? */
@@ -305,38 +315,21 @@ void free_strings(char **strings, int num)
 /* Set SuperTux configuration and save directories */
 void st_directory_setup(void)
 {
-  char *home;
+  const char* home = "/vmu/a1";
   char str[1024];
-  /* Get home directory (from $HOME variable)... if we can't determine it,
-     use the current directory ("."): */
-  if (getenv("HOME") != NULL)
-    home = getenv("HOME");
-  else
-    home = ".";
 
-  st_dir = (char *) malloc(sizeof(char) * (strlen(home) +
-                                           strlen("/.supertux") + 1));
+  st_dir = (char *) malloc(sizeof(char) * (strlen(home) + 1));
   strcpy(st_dir, home);
-  strcat(st_dir, "/.supertux");
 
-  /* Remove .supertux config-file from old SuperTux versions */
-  if(faccessible(st_dir))
-    {
-      remove
-        (st_dir);
-    }
-
-  st_save_dir = (char *) malloc(sizeof(char) * (strlen(st_dir) + strlen("/save") + 1));
+  st_save_dir = (char *) malloc(sizeof(char) * (strlen(st_dir) + 1));
 
   strcpy(st_save_dir,st_dir);
-  strcat(st_save_dir,"/save");
 
   /* Create them. In the case they exist they won't destroy anything. */
   mkdir(st_dir, 0755);
-  mkdir(st_save_dir, 0755);
 
-  sprintf(str, "%s/levels", st_dir);
-  mkdir(str, 0755);
+  //sprintf(str, "%s/levels", st_dir);
+  //mkdir(str, 0755);
 
   datadir = DATA_PREFIX;
   printf("Datadir: %s\n", datadir.c_str());
@@ -390,7 +383,7 @@ void st_menu(void)
   //  options_menu->additem(MN_GOTO,"Joystick Setup",0,options_joystick_menu);
 
   options_menu->additem(MN_HL,"",0,0);
-  options_menu->additem(MN_BACK,"Back",0,0);
+  options_menu->additem(MN_BACKSAVE,"Back",0,0);
   
   options_keys_menu->additem(MN_LABEL,"Key Setup",0,0);
   options_keys_menu->additem(MN_HL,"",0,0);
@@ -472,7 +465,8 @@ bool process_load_game_menu()
   if(slot != -1 && load_game_menu->get_item_by_id(slot).kind == MN_ACTION)
     {
       char slotfile[1024];
-      snprintf(slotfile, 1024, "%s/slot%d.stsg", st_save_dir, slot);
+      snprintf(slotfile, 1024, "%s/STSLOT%d", st_save_dir, slot);
+      printf("load slotfile %s\n", slotfile);
 
       if (!faccessible(slotfile))
         {
