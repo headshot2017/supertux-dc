@@ -29,6 +29,18 @@
 
 /* IDs for menus */
 
+enum VMUMenuIDs
+{
+	MNID_SLOTA1,
+	MNID_SLOTA2,
+	MNID_SLOTB1,
+	MNID_SLOTB2,
+	MNID_SLOTC1,
+	MNID_SLOTC2,
+	MNID_SLOTD1,
+	MNID_SLOTD2
+};
+
 enum MainMenuIDs {
   MNID_STARTGAME,
   MNID_CONTRIB,
@@ -92,6 +104,7 @@ enum LevelEditorSettingsMenuIDs {
   MNID_APPLY
   };
 
+void message_dialog(Surface* bg, std::string text);
 bool confirm_dialog(std::string text);
 
 /* Kinds of menu items */
@@ -229,6 +242,7 @@ extern Surface* back;
 extern Surface* arrow_left;
 extern Surface* arrow_right;
 
+extern Menu* vmu_menu;
 extern Menu* contrib_menu;
 extern Menu* contrib_subset_menu;
 extern Menu* main_menu;

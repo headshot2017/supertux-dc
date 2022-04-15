@@ -25,6 +25,7 @@
 #include <string.h>
 #include <errno.h>
 #include <unistd.h>
+#include <kos.h>
 #include <SDL.h>
 #include <SDL_image.h>
 
@@ -33,6 +34,7 @@
 #include <ctype.h>
 #endif
 
+#include "configfile.h"
 #include "defines.h"
 #include "globals.h"
 #include "title.h"
@@ -91,6 +93,38 @@ void createDemo()
 	session = new GameSession(datadir + "/levels/misc/menu.stl", 0, ST_GL_DEMO_GAME);
 	bkg_title = session->get_level()->img_bkgd;
 	logo = new Surface(datadir + "/images/title/logo.png", USE_ALPHA);
+}
+
+// Change VMU save.
+bool selectVMU(const char* vmu)
+{
+	std::map<char, int> controllerToInt;
+	controllerToInt['a'] = 0;
+	controllerToInt['b'] = 1;
+	controllerToInt['c'] = 2;
+	controllerToInt['d'] = 3;
+
+	char oldhome[64];
+	char newhome[64];
+	strcpy(oldhome, st_dir);
+	sprintf(newhome, "/vmu/%s", vmu);
+
+      int num = *(vmu+1) - '0';
+
+	maple_device_t* device = maple_enum_dev(controllerToInt[*(vmu)], num);
+	if(device)
+	{
+		strcpy(st_dir, newhome);
+		printf("selected VMU %s\n", vmu);
+		loadconfig();
+		return true;
+	}
+
+	char msg[128];
+	sprintf(msg, "VMU slot '%s' is not connected", vmu);
+      printf("%s\n", msg);
+	message_dialog(bkg_title, msg);
+	return false;
 }
 
 
@@ -297,7 +331,7 @@ void title(void)
   update_time = st_get_ticks();
   random_timer.start(rand() % 2000 + 2000);
 
-  Menu::set_current(main_menu);
+  Menu::set_current(vmu_menu);
 
   loadsounds();
 
@@ -345,8 +379,38 @@ void title(void)
         {
           menu->draw();
           menu->action();
-        
-          if(menu == main_menu)
+
+          if(menu == vmu_menu)
+          {
+              switch(vmu_menu->check())
+              {
+                  case MNID_SLOTA1:
+                      selectVMU("a1") ? Menu::set_current(main_menu) : Menu::set_current(vmu_menu);
+                      break;
+                  case MNID_SLOTA2:
+                      selectVMU("a2") ? Menu::set_current(main_menu) : Menu::set_current(vmu_menu);
+                      break;
+                  case MNID_SLOTB1:
+                      selectVMU("b1") ? Menu::set_current(main_menu) : Menu::set_current(vmu_menu);
+                      break;
+                  case MNID_SLOTB2:
+                      selectVMU("b2") ? Menu::set_current(main_menu) : Menu::set_current(vmu_menu);
+                      break;
+                  case MNID_SLOTC1:
+                      selectVMU("c1") ? Menu::set_current(main_menu) : Menu::set_current(vmu_menu);
+                      break;
+                  case MNID_SLOTC2:
+                      selectVMU("c2") ? Menu::set_current(main_menu) : Menu::set_current(vmu_menu);
+                      break;
+                  case MNID_SLOTD1:
+                      selectVMU("d1") ? Menu::set_current(main_menu) : Menu::set_current(vmu_menu);
+                      break;
+                  case MNID_SLOTD2:
+                      selectVMU("d2") ? Menu::set_current(main_menu) : Menu::set_current(vmu_menu);
+                      break;
+              }
+          }
+          else if(menu == main_menu)
             {
               MusicRef menu_song;
               switch (main_menu->check())
@@ -361,7 +425,7 @@ void title(void)
                   generate_contrib_menu();
                   break;
                 case MNID_LEVELEDITOR:
-                  leveleditor();
+                  //leveleditor();
                   Menu::set_current(main_menu);
                   break;
                 case MNID_CREDITS:

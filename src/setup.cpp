@@ -338,6 +338,7 @@ void st_directory_setup(void)
 /* Create and setup menus. */
 void st_menu(void)
 {
+  vmu_menu       = new Menu();
   main_menu      = new Menu();
   options_menu   = new Menu();
   options_keys_menu     = new Menu();
@@ -349,6 +350,25 @@ void st_menu(void)
   contrib_menu   = new Menu();
   contrib_subset_menu   = new Menu();
   worldmap_menu  = new Menu();
+
+  vmu_menu->additem(MN_LABEL, "Select memory card", 0, 0);
+  vmu_menu->additem(MN_HL, "", 0, 0);
+  vmu_menu->additem(MN_LABEL, "Controller A", 0, 0);
+  vmu_menu->additem(MN_ACTION, "Slot A1", 0, 0, MNID_SLOTA1);
+  vmu_menu->additem(MN_ACTION, "Slot A2", 0, 0, MNID_SLOTA2);
+  vmu_menu->additem(MN_HL, "", 0, 0);
+  vmu_menu->additem(MN_LABEL, "Controller B", 0, 0);
+  vmu_menu->additem(MN_ACTION, "Slot B1", 0, 0, MNID_SLOTB1);
+  vmu_menu->additem(MN_ACTION, "Slot B2", 0, 0, MNID_SLOTB2);
+  vmu_menu->additem(MN_HL, "", 0, 0);
+  vmu_menu->additem(MN_LABEL, "Controller C", 0, 0);
+  vmu_menu->additem(MN_ACTION, "Slot C1", 0, 0, MNID_SLOTC1);
+  vmu_menu->additem(MN_ACTION, "Slot C2", 0, 0, MNID_SLOTC2);
+  vmu_menu->additem(MN_HL, "", 0, 0);
+  vmu_menu->additem(MN_LABEL, "Controller D", 0, 0);
+  vmu_menu->additem(MN_ACTION, "Slot D1", 0, 0, MNID_SLOTD1);
+  vmu_menu->additem(MN_ACTION, "Slot D2", 0, 0, MNID_SLOTD2);
+  vmu_menu->additem(MN_HL, "", 0, 0);
 
   main_menu->set_pos(screen->w/2, 335);
   main_menu->additem(MN_GOTO, "Start Game",0,load_game_menu, MNID_STARTGAME);
@@ -909,7 +929,7 @@ void parseargs(int argc, char * argv[])
 {
   int i;
 
-  loadconfig();
+  defaults(); // default config
 
   /* Parse arguments: */
 

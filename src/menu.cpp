@@ -48,6 +48,7 @@ Surface* back;
 Surface* arrow_left;
 Surface* arrow_right;
 
+Menu* vmu_menu       = 0;
 Menu* main_menu      = 0;
 Menu* game_menu      = 0;
 Menu* worldmap_menu  = 0;
@@ -62,6 +63,40 @@ Menu* contrib_subset_menu   = 0;
 
 std::vector<Menu*> Menu::last_menus;
 Menu* Menu::current_ = 0;
+
+void message_dialog(Surface* bg, std::string text)
+{
+	Menu* dialog = new Menu;
+	dialog->additem(MN_DEACTIVE, text,0,0);
+	dialog->additem(MN_HL,"",0,0);
+	dialog->additem(MN_ACTION,"OK",0,0,true);
+
+	Menu::set_current(dialog);
+
+	while(true)
+	{
+		SDL_Event event;
+
+		while (SDL_PollEvent(&event))
+		{
+			dialog->event(event);
+		}
+
+		bg->draw(0,0);
+
+		dialog->draw();
+		dialog->action();
+
+		if(dialog->check() != -1)
+		{
+			Menu::set_current(0);
+			delete dialog;
+			return;
+		}
+
+		flipscreen();
+	}
+}
 
 /* just displays a Yes/No text that can be used to confirm stuff */
 bool confirm_dialog(std::string text)
@@ -111,7 +146,7 @@ bool confirm_dialog(std::string text)
 
     //mouse_cursor->draw();
     flipscreen();
-    SDL_Delay(25);
+    //SDL_Delay(25);
   }
 
 
