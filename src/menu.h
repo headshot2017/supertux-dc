@@ -129,7 +129,7 @@ class MenuItem
 {
 public:
   MenuItemKind kind;
-  int toggled;
+  bool* toggled;
   char *text;
   char *input;
   int *int_p;   // used for setting keys (can be used for more stuff...)
@@ -140,7 +140,7 @@ public:
   void change_text (const char *text);
   void change_input(const char *text);
 
-  static MenuItem* create(MenuItemKind kind, const char *text, int init_toggle, Menu* target_menu, int id, int* int_p);
+  static MenuItem* create(MenuItemKind kind, const char *text, bool* init_toggle, Menu* target_menu, int id, int* int_p);
 
   std::string get_input_with_symbol(bool active_item);   // returns the text with an input symbol
 private:
@@ -203,7 +203,7 @@ public:
   ~Menu();
 
   void additem(MenuItem* pmenu_item);
-  void additem(MenuItemKind kind, const std::string& text, int init_toggle, Menu* target_menu, int id = -1, int *int_p = NULL);
+  void additem(MenuItemKind kind, const std::string& text, bool* init_toggle, Menu* target_menu, int id = -1, int *int_p = NULL);
   
   void  action ();
   

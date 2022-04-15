@@ -191,7 +191,7 @@ Menu::set_current(Menu* menu)
 
 /* Return a pointer to a new menu item */
 MenuItem*
-MenuItem::create(MenuItemKind kind_, const char *text_, int init_toggle_, Menu* target_menu_, int id, int* int_p_)
+MenuItem::create(MenuItemKind kind_, const char *text_, bool* init_toggle_, Menu* target_menu_, int id, int* int_p_)
 {
   MenuItem *pnew_item = new MenuItem;
 
@@ -202,7 +202,7 @@ MenuItem::create(MenuItemKind kind_, const char *text_, int init_toggle_, Menu* 
   if(kind_ == MN_TOGGLE)
     pnew_item->toggled = init_toggle_;
   else
-    pnew_item->toggled = false;
+    pnew_item->toggled = 0;
 
   pnew_item->target_menu = target_menu_;
   pnew_item->input = (char*) malloc(sizeof(char));
@@ -362,7 +362,7 @@ void Menu::set_pos(int x, int y, float rw, float rh)
 }
 
 void
-Menu::additem(MenuItemKind kind_, const std::string& text_, int toggle_, Menu* menu_, int id, int* int_p)
+Menu::additem(MenuItemKind kind_, const std::string& text_, bool* toggle_, Menu* menu_, int id, int* int_p)
 {
   additem(MenuItem::create(kind_, text_.c_str(), toggle_, menu_, id, int_p));
 }
@@ -439,12 +439,12 @@ Menu::action()
           break;
 
         case MN_TOGGLE:
-          item[active_item].toggled = !item[active_item].toggled;
+          *item[active_item].toggled = !(*item[active_item].toggled);
           break;
 
         case MN_ACTION:
           Menu::set_current(0);
-          item[active_item].toggled = true;
+          *item[active_item].toggled = true;
           break;
         case MN_TEXTFIELD:
         case MN_NUMFIELD:
@@ -667,7 +667,7 @@ Menu::draw_item(int index, // Position of the current item in the menu
     {
       text_font->draw_align(pitem.text, x_pos, y_pos, A_HMIDDLE, A_VMIDDLE, shadow_size);
 
-      if(pitem.toggled)
+      if(*pitem.toggled)
         checkbox_checked->draw(
           x_pos + (text_width+font_width)/2,
           y_pos - 8);
@@ -694,7 +694,7 @@ int Menu::get_width() const
   int menu_width = 0;
   for(unsigned int i = 0; i < item.size(); ++i)
   {
-    int w = strlen(item[i].text) + (item[i].input ? strlen(item[i].input) + 1 : 0) + strlen(string_list_active(item[i].list));
+    int w = 4 + strlen(item[i].text) + (item[i].input ? strlen(item[i].input) + 1 : 0) + strlen(string_list_active(item[i].list));
     if( w > menu_width )
     {
       menu_width = w;
@@ -752,7 +752,7 @@ int Menu::get_active_item_id()
 bool
 Menu::isToggled(int id)
 {
-  return get_item_by_id(id).toggled;
+  return *get_item_by_id(id).toggled;
 }
 
 /* Check for menu event */

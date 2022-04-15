@@ -1002,7 +1002,7 @@ void le_change_object_properties(GameObject *pobj)
       if(pbad->kind == i)
         object_properties_menu->get_item_by_id(1).list->active_item = i;
     }
-    object_properties_menu->additem(MN_TOGGLE,"StayOnPlatform",pbad->stay_on_platform,0,2);
+    object_properties_menu->additem(MN_TOGGLE,"StayOnPlatform",&pbad->stay_on_platform,0,2);
   }
 
   object_properties_menu->additem(MN_HL,"",0,0);

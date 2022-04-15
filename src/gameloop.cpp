@@ -780,6 +780,7 @@ std::string slotinfo(int slot)
   char slotfile[1024];
   std::string title;
   sprintf(slotfile,"%s/STSLOT%d",st_save_dir,slot);
+  printf("%s\n", slotfile);
 
   FILE* file = fopen(slotfile, "r");
 

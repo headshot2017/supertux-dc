@@ -118,6 +118,7 @@ bool selectVMU(const char* vmu)
 		strcpy(st_save_dir, newhome);
 		printf("selected VMU %s\n", vmu);
 		loadconfig();
+		music_manager->enable_music(use_music);
 		return true;
 	}
 
@@ -152,7 +153,7 @@ void generate_contrib_menu()
     {
       LevelSubset* subset = new LevelSubset();
       subset->load(level_subsets.item[i]);
-      contrib_menu->additem(MN_GOTO, subset->title.c_str(), i,
+      contrib_menu->additem(MN_GOTO, subset->title.c_str(), 0,
           contrib_subset_menu, i);
       contrib_subsets.push_back(subset);
     }

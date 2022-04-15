@@ -381,22 +381,22 @@ void st_menu(void)
   options_menu->additem(MN_LABEL,"Options",0,0);
   options_menu->additem(MN_HL,"",0,0);
 #ifndef NOOPENGL
-  options_menu->additem(MN_TOGGLE,"OpenGL",use_gl,0, MNID_OPENGL);
+  options_menu->additem(MN_TOGGLE,"OpenGL",&use_gl,0, MNID_OPENGL);
 #else
-  options_menu->additem(MN_DEACTIVE,"OpenGL (not supported)",use_gl, 0, MNID_OPENGL);
+  options_menu->additem(MN_DEACTIVE,"OpenGL (not supported)",&use_gl, 0, MNID_OPENGL);
 #endif
-  options_menu->additem(MN_TOGGLE,"Fullscreen",use_fullscreen,0, MNID_FULLSCREEN);
+  options_menu->additem(MN_TOGGLE,"Fullscreen",&use_fullscreen,0, MNID_FULLSCREEN);
   if(audio_device)
     {
-      options_menu->additem(MN_TOGGLE,"Sound     ", use_sound,0, MNID_SOUND);
-      options_menu->additem(MN_TOGGLE,"Music     ", use_music,0, MNID_MUSIC);
+      options_menu->additem(MN_TOGGLE,"Sound     ", &use_sound,0, MNID_SOUND);
+      options_menu->additem(MN_TOGGLE,"Music     ", &use_music,0, MNID_MUSIC);
     }
   else
     {
-      options_menu->additem(MN_DEACTIVE,"Sound     ", false,0, MNID_SOUND);
-      options_menu->additem(MN_DEACTIVE,"Music     ", false,0, MNID_MUSIC);
+      options_menu->additem(MN_DEACTIVE,"Sound     ", &use_sound,0, MNID_SOUND);
+      options_menu->additem(MN_DEACTIVE,"Music     ", &use_music,0, MNID_MUSIC);
     }
-  options_menu->additem(MN_TOGGLE,"Show FPS  ",show_fps,0, MNID_SHOWFPS);
+  options_menu->additem(MN_TOGGLE,"Show FPS  ",&show_fps,0, MNID_SHOWFPS);
   options_menu->additem(MN_GOTO,"Keyboard Setup",0,options_keys_menu);
 
   //if(use_joystick)
@@ -531,34 +531,35 @@ void process_options_menu(void)
 #ifndef NOOPENGL
       if(use_gl != options_menu->isToggled(MNID_OPENGL))
         {
-          use_gl = !use_gl;
+          //use_gl = !use_gl;
           st_video_setup();
         }
 #else
-      options_menu->get_item_by_id(MNID_OPENGL).toggled = false;
+      *options_menu->get_item_by_id(MNID_OPENGL).toggled = false;
 #endif
       break;
     case MNID_FULLSCREEN:
       if(use_fullscreen != options_menu->isToggled(MNID_FULLSCREEN))
         {
-          use_fullscreen = !use_fullscreen;
+          //use_fullscreen = !use_fullscreen;
           st_video_setup();
         }
       break;
     case MNID_SOUND:
-      if(use_sound != options_menu->isToggled(MNID_SOUND))
-        use_sound = !use_sound;
+      //if(use_sound != options_menu->isToggled(MNID_SOUND))
+        //use_sound = !use_sound;
       break;
     case MNID_MUSIC:
+      music_manager->enable_music(use_music);
       if(use_music != options_menu->isToggled(MNID_MUSIC))
         {
-          use_music = !use_music;
-          music_manager->enable_music(use_music);
+          //use_music = !use_music;
+          //music_manager->enable_music(use_music);
         }
       break;
     case MNID_SHOWFPS:
-      if(show_fps != options_menu->isToggled(MNID_SHOWFPS))
-        show_fps = !show_fps;
+      //if(show_fps != options_menu->isToggled(MNID_SHOWFPS))
+        //show_fps = !show_fps;
       break;
     }
 }
