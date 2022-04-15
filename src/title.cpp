@@ -115,6 +115,7 @@ bool selectVMU(const char* vmu)
 	if(device)
 	{
 		strcpy(st_dir, newhome);
+		strcpy(st_save_dir, newhome);
 		printf("selected VMU %s\n", vmu);
 		loadconfig();
 		return true;
