@@ -24,6 +24,7 @@
 
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
+#include <SDL_dreamcast.h>
 #undef main
 
 #include <sys/types.h>
@@ -50,7 +51,11 @@ int main(int argc, char ** argv)
   // get a loading screen up and running quickly because this will take a while
   st_video_setup();
   st_general_setup();
-  SDL_ShowCursor(true);
+
+  SDL_ShowCursor(false);
+  SDL_DC_EmulateKeyboard(SDL_FALSE);
+  SDL_DC_EmulateMouse(SDL_FALSE);
+
   fadeout();
 
   st_audio_setup();
