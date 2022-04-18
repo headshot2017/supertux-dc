@@ -18,7 +18,13 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 
+#ifdef __DREAMCAST__
 #include <kos.h>
+#endif
+
+#define SDL_MAIN_HANDLED
+#include <SDL.h>
+#undef main
 
 #include <sys/types.h>
 #include <ctype.h>
@@ -36,17 +42,15 @@
 #include "texture.h"
 #include "tile.h"
 
-int main(int argc, char * argv[])
+int main(int argc, char ** argv)
 {
-  pvr_init_defaults();
-
   st_directory_setup();
   parseargs(argc, argv);
 
   // get a loading screen up and running quickly because this will take a while
   st_video_setup();
   st_general_setup();
-  SDL_ShowCursor(false);
+  SDL_ShowCursor(true);
   fadeout();
 
   st_audio_setup();

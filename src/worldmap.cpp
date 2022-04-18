@@ -199,9 +199,24 @@ Tux::Tux(WorldMap* worldmap_)
 
 Tux::~Tux()
 {
-  delete smalltux_sprite;
-  delete firetux_sprite;
-  delete largetux_sprite;
+  deleteSprites();
+}
+
+void Tux::loadSprites()
+{
+	largetux_sprite = new Surface(datadir +  "/images/worldmap/tux.png", USE_ALPHA);
+	firetux_sprite = new Surface(datadir +  "/images/worldmap/firetux.png", USE_ALPHA);
+	smalltux_sprite = new Surface(datadir +  "/images/worldmap/smalltux.png", USE_ALPHA);
+}
+
+void Tux::deleteSprites()
+{
+	if (smalltux_sprite) delete smalltux_sprite;
+	if (firetux_sprite) delete firetux_sprite;
+	if (largetux_sprite) delete largetux_sprite;
+	smalltux_sprite = 0;
+	firetux_sprite = 0;
+	largetux_sprite = 0;
 }
 
 void
@@ -369,7 +384,6 @@ Tile::Tile()
 
 Tile::~Tile()
 {
-  printf("del sprite\n");
   delete sprite;
 }
 
@@ -387,10 +401,7 @@ WorldMap::WorldMap()
 
   passive_message_timer.init(true);
 
-  level_sprite = new Surface(datadir +  "/images/worldmap/levelmarker.png", USE_ALPHA);
-  leveldot_green = new Surface(datadir +  "/images/worldmap/leveldot_green.png", USE_ALPHA);
-  leveldot_red = new Surface(datadir +  "/images/worldmap/leveldot_red.png", USE_ALPHA);
-  leveldot_teleporter = new Surface(datadir +  "/images/worldmap/teleporter.png", USE_ALPHA);
+  loadSprites();
   
   map_file = datadir + "/levels/worldmaps/world1.stwm";
   
@@ -406,10 +417,27 @@ WorldMap::~WorldMap()
   delete tux;
   delete tile_manager;
 
-  delete level_sprite;
-  delete leveldot_green;
-  delete leveldot_red;
-  delete leveldot_teleporter;
+  deleteSprites();
+}
+
+void WorldMap::loadSprites()
+{
+	level_sprite = new Surface(datadir +  "/images/worldmap/levelmarker.png", USE_ALPHA);
+	leveldot_green = new Surface(datadir +  "/images/worldmap/leveldot_green.png", USE_ALPHA);
+	leveldot_red = new Surface(datadir +  "/images/worldmap/leveldot_red.png", USE_ALPHA);
+	leveldot_teleporter = new Surface(datadir +  "/images/worldmap/teleporter.png", USE_ALPHA);
+}
+
+void WorldMap::deleteSprites()
+{
+      if (level_sprite) delete level_sprite;
+	if (leveldot_green) delete leveldot_green;
+	if (leveldot_red) delete leveldot_red;
+	if (leveldot_teleporter) delete leveldot_teleporter;
+	level_sprite = 0;
+	leveldot_green = 0;
+	leveldot_red = 0;
+	leveldot_teleporter = 0;
 }
 
 void
@@ -727,6 +755,10 @@ WorldMap::update(float delta)
               level->y == tux->get_tile_pos().y)
             {
               std::cout << "Enter the current level: " << level->name << std::endl;;
+
+              deleteSprites();
+              tux->deleteSprites();
+
               GameSession session(datadir +  "/levels/" + level->name,
                                   1, ST_GL_LOAD_LEVEL_FILE);
 
@@ -809,6 +841,9 @@ WorldMap::update(float delta)
                 }
 
               unloadsounds();
+              loadSprites();
+              tux->loadSprites();
+
               music_manager->play_music(song);
               Menu::set_current(0);
               if (!savegame_file.empty())
@@ -1069,7 +1104,13 @@ WorldMap::savegame(const std::string& filename)
   FILE* f = fopen(filename.c_str(), "w");
   char desc[128];
   sprintf(desc, "Icyisland - %d/%d", nb_solved_levels, levels.size());
+
+#ifdef __DREAMCAST__
   saveToVMU(f, out.str().c_str(), desc);
+#else
+  fwrite(out.str().c_str(), 1, out.str().size(), f);
+#endif
+
   fclose(f);
 }
 
@@ -1083,11 +1124,13 @@ WorldMap::loadgame(const std::string& filename)
   if (!file)
     return;
 
+#ifdef __DREAMCAST__
   // Dreamcast: parse VMU data
   vmu_pkg_t pkg = loadFromVMU(file);
   fclose(file);
 
   file = fmemopen((char*)pkg.data, (size_t)pkg.data_len, "r");
+#endif
 
   // read slot file
   lisp_stream_t stream;

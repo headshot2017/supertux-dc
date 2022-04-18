@@ -6,7 +6,7 @@
 # Put the filename of the output binary here
 TARGET = supertux.elf
 
-CXXFLAGS += -DNOOPENGL -Iports/SDL-dreamhal--GLDC/include
+CXXFLAGS += -D__DREAMCAST__ -DNOOPENGL -I$(KOS_PORTS)/include/zlib -Iports/SDL-dreamhal--GLDC/include
 
 # List all of your C files here, but change the extension to ".o"
 # Include "romdisk.o" if you want a rom disk.
@@ -35,5 +35,5 @@ run: $(TARGET)
 	$(KOS_LOADER) $(TARGET)
 
 dist:
-	rm -f $(OBJS) romdisk.o romdisk.img
+#	rm -f $(OBJS) romdisk.o romdisk.img
 	$(KOS_STRIP) $(TARGET)

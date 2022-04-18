@@ -23,7 +23,7 @@
 #define SUPERTUX_WORLD_H
 
 #include <vector>
-#include <SDL/SDL.h>
+#include <SDL.h>
 #include "type.h"
 #include "scene.h"
 #include "special.h"
@@ -71,6 +71,9 @@ public:
   World() {};
   ~World();
   
+  void activate_world();
+  void deactivate_world();
+
   Level*  get_level() { return level; }
   Player* get_tux() { return &tux; }
 

@@ -30,7 +30,10 @@
 #include <math.h>
 #include <time.h>
 #include <SDL.h>
+
+#ifdef __DREAMCAST__
 #include <kos.h>
+#endif
 
 #ifndef WIN32
 #include <sys/types.h>
@@ -87,24 +90,27 @@ GameSession::restart_level()
   float old_x_pos = -1;
 
   if (world)
-    { // Tux has lost a life, so we try to respawn him at the nearest reset point
+  { // Tux has lost a life, so we try to respawn him at the nearest reset point
+      world->get_tux()->init();
       old_x_pos = world->get_tux()->base.x;
-    }
-  
-  delete world;
-
-  if (st_gl_mode == ST_GL_LOAD_LEVEL_FILE)
-    {
-      world = new World(subset);
-    }
-  else if (st_gl_mode == ST_GL_DEMO_GAME)
-    {
-      world = new World(subset);
-    }
+      world->deactivate_world();
+      world->activate_world();
+  }
   else
-    {
-      world = new World(subset, levelnb);
-    }
+  {
+      if (st_gl_mode == ST_GL_LOAD_LEVEL_FILE)
+      {
+          world = new World(subset);
+      }
+      else if (st_gl_mode == ST_GL_DEMO_GAME)
+      {
+          world = new World(subset);
+      }
+      else
+      {
+          world = new World(subset, levelnb);
+      }
+  }
 
   // Set Tux to the nearest reset point
   if (old_x_pos != -1)
@@ -214,10 +220,10 @@ GameSession::process_events()
       tux.input.right = DOWN;
       tux.input.down  = UP; 
 
-      if (int(last_x_pos) == int(tux.base.x))
-        tux.input.up    = DOWN; 
+      if (last_x_pos == tux.base.x)
+        tux.input.up = DOWN;
       else
-        tux.input.up    = UP; 
+        tux.input.up = UP; 
 
       last_x_pos = tux.base.x;
 
@@ -789,11 +795,14 @@ std::string slotinfo(int slot)
   if (file)
   {
       opened = true;
+
+#ifdef __DREAMCAST__
       // Dreamcast: parse VMU data
       vmu_pkg_t pkg = loadFromVMU(file);
       fclose(file);
 
       file = fmemopen((char*)pkg.data, (size_t)pkg.data_len, "r");
+#endif
 
       // read slot file
       lisp_stream_t stream;

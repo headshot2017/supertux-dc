@@ -59,10 +59,13 @@
 #ifdef WIN32
 #define mkdir(dir, mode)    mkdir(dir)
 // on win32 we typically don't want LFS paths
-#undef DATA_PREFIX
 #endif
 
+#ifdef __DREAMCAST__
 #define DATA_PREFIX "/cd/data"
+#else
+#define DATA_PREFIX "cd_root/data"
+#endif
 
 /* Screen proprities: */
 /* Don't use this to test for the actual screen sizes. Use screen->w/h instead! */
@@ -315,7 +318,12 @@ void free_strings(char **strings, int num)
 /* Set SuperTux configuration and save directories */
 void st_directory_setup(void)
 {
+#ifdef __DREAMCAST__
   const char* home = "/vmu/a1";
+#else
+  const char* home = "save";
+#endif
+
   char str[1024];
 
   st_dir = (char *) malloc(sizeof(char) * (strlen(home) + 1));
@@ -494,7 +502,7 @@ bool process_load_game_menu()
         }
 
       unloadsounds();
-	deleteDemo();
+      deleteDemo();
 
       fadeout();
       WorldMapNS::WorldMap* worldmap = new WorldMapNS::WorldMap;
@@ -930,7 +938,11 @@ void parseargs(int argc, char * argv[])
 {
   int i;
 
+#ifdef __DREAMCAST__
   defaults(); // default config
+#else
+  loadconfig();
+#endif
 
   /* Parse arguments: */
 

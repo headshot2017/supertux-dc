@@ -22,7 +22,7 @@
 #define SUPERTUX_TYPE_H
 
 #include <string>
-#include "SDL/SDL.h"
+#include "SDL.h"
 #include "scene.h"
 
 /* 'Base' type for game objects */

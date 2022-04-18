@@ -64,7 +64,7 @@
 #ifndef SUPERTUX_BITMASK_H
 #define SUPERTUX_BITMASK_H
 
-#include <SDL/SDL.h>
+#include <SDL.h>
 
 /* Define INLINE for different compilers. */
 #ifndef INLINE

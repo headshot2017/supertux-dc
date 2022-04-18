@@ -20,7 +20,7 @@
 #ifndef SUPERTUX_SPECIAL_H
 #define SUPERTUX_SPECIAL_H
 
-#include <SDL/SDL.h>
+#include <SDL.h>
 #include "bitmask.h"
 #include "type.h"
 #include "texture.h"

@@ -20,9 +20,9 @@
 #ifndef SUPERTUX_SCREEN_H
 #define SUPERTUX_SCREEN_H
 
-#include <SDL/SDL.h>
+#include <SDL.h>
 #ifndef NOOPENGL
-#include <SDL/SDL_opengl.h>
+#include <SDL_opengl.h>
 #endif
 #include "texture.h"
 

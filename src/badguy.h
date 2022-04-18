@@ -23,7 +23,7 @@
 #ifndef SUPERTUX_BADGUY_H
 #define SUPERTUX_BADGUY_H
 
-#include "SDL/SDL.h"
+#include "SDL.h"
 #include "defines.h"
 #include "bitmask.h"
 #include "type.h"

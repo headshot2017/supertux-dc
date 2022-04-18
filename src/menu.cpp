@@ -444,7 +444,7 @@ Menu::action()
 
         case MN_ACTION:
           Menu::set_current(0);
-          *item[active_item].toggled = true;
+          if (item[active_item].toggled) *item[active_item].toggled = true;
           break;
         case MN_TEXTFIELD:
         case MN_NUMFIELD:
@@ -877,11 +877,11 @@ Menu::event(SDL_Event& event)
         y < pos_y + get_height()/2)
     {
       active_item = (y - (pos_y - get_height()/2)) / 24;
-      mouse_cursor->set_state(MC_LINK);
+      //mouse_cursor->set_state(MC_LINK);
     }
     else
     {
-      mouse_cursor->set_state(MC_NORMAL);
+      //mouse_cursor->set_state(MC_NORMAL);
     }
     break;
   default:

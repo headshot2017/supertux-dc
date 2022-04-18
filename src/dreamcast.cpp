@@ -1,3 +1,5 @@
+#ifdef __DREAMCAST__
+
 #include "dreamcast.h"
 #include "setup.h"
 
@@ -36,3 +38,6 @@ void saveToVMU(FILE* f, const char* data, const char* longdesc)
 
 	fwrite(pkg_out, 1, pkg_size, f);
 }
+
+#endif // __DREAMCAST__
+

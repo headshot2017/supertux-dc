@@ -20,7 +20,7 @@
 #ifndef SUPERTUX_PLAYER_H
 #define SUPERTUX_PLAYER_H
 
-#include <SDL/SDL.h>
+#include <SDL.h>
 #include "bitmask.h"
 #include "type.h"
 #include "timer.h"

@@ -59,11 +59,13 @@ void loadconfig(void)
   if (file == NULL)
     return;
 
+#ifdef __DREAMCAST__
   // Dreamcast: parse VMU data
   vmu_pkg_t pkg = loadFromVMU(file);
   fclose(file);
 
   file = fmemopen((char*)pkg.data, (size_t)pkg.data_len, "r");
+#endif
 
   /* read config file */
 
@@ -151,7 +153,11 @@ void saveconfig (void)
 \t(keyboard-fire  %d)\n\
 )\n", use_fullscreen ? "#t" : "#f", use_sound ? "#t" : "#f", use_music ? "#t" : "#f", show_fps ? "#t" : "#f", use_gl ? "opengl" : "sdl", use_joystick ? joystick_num : -1, joystick_keymap.x_axis, joystick_keymap.y_axis, joystick_keymap.a_button, joystick_keymap.b_button, joystick_keymap.start_button, joystick_keymap.dead_zone, keymap.jump, keymap.duck, keymap.left, keymap.right, keymap.fire);
 
+#ifdef __DREAMCAST__
       saveToVMU(config, data, "Game configuration");
+#else
+      fwrite(data, 1, sizeof(data), config);
+#endif
 
       fclose(config);
     }

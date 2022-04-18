@@ -25,9 +25,12 @@
 #include <string.h>
 #include <errno.h>
 #include <unistd.h>
-#include <kos.h>
 #include <SDL.h>
 #include <SDL_image.h>
+
+#ifdef __DREAMCAST__
+#include <kos.h>
+#endif
 
 #ifndef WIN32
 #include <sys/types.h>
@@ -95,6 +98,7 @@ void createDemo()
 	logo = new Surface(datadir + "/images/title/logo.png", USE_ALPHA);
 }
 
+#ifdef __DREAMCAST__
 // Change VMU save.
 bool selectVMU(const char* vmu)
 {
@@ -109,7 +113,7 @@ bool selectVMU(const char* vmu)
 	strcpy(oldhome, st_dir);
 	sprintf(newhome, "/vmu/%s", vmu);
 
-      int num = *(vmu+1) - '0';
+	int num = *(vmu+1) - '0';
 
 	maple_device_t* device = maple_enum_dev(controllerToInt[*(vmu)], num);
 	if(device)
@@ -124,11 +128,11 @@ bool selectVMU(const char* vmu)
 
 	char msg[128];
 	sprintf(msg, "VMU slot '%s' is not connected", vmu);
-      printf("%s\n", msg);
+	printf("%s\n", msg);
 	message_dialog(bkg_title, msg);
 	return false;
 }
-
+#endif
 
 void free_contrib_menu()
 {
@@ -333,7 +337,11 @@ void title(void)
   update_time = st_get_ticks();
   random_timer.start(rand() % 2000 + 2000);
 
+#ifdef __DREAMCAST__
   Menu::set_current(vmu_menu);
+#else
+  Menu::set_current(main_menu);
+#endif
 
   loadsounds();
 
@@ -384,6 +392,7 @@ void title(void)
 
           if(menu == vmu_menu)
           {
+#ifdef __DREAMCAST__
               switch(vmu_menu->check())
               {
                   case MNID_SLOTA1:
@@ -411,6 +420,7 @@ void title(void)
                       selectVMU("d2") ? Menu::set_current(main_menu) : Menu::set_current(vmu_menu);
                       break;
               }
+#endif
           }
           else if(menu == main_menu)
             {

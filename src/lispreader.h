@@ -25,7 +25,7 @@
 #define __LISPREADER_H__
 
 #include <stdio.h>
-#include <zlib/zlib.h>
+#include <zlib.h>
 #include <string>
 #include <vector>
 
