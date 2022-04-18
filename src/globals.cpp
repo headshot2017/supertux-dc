@@ -25,14 +25,14 @@ std::string datadir;
 
 JoystickKeymap::JoystickKeymap()
 {
-  a_button     = 0;
+  c_button     = 0;
   b_button     = 1;
-  x_button     = 2;
-  y_button     = 3;
-  start_button = 4;
-  c_button     = 5;
-  d_button     = 6;
-  z_button     = 7;
+  a_button     = 2;
+  start_button = 3;
+  z_button     = 4;
+  y_button     = 5;
+  x_button     = 6;
+  d_button     = 7;
   
   x_axis = 0;
   y_axis = 1;
