@@ -18,14 +18,14 @@
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 //  02111-1307, USA.
 
-#ifdef __DREAMCAST__
-#include <kos.h>
-#endif
-
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
-#include <SDL_dreamcast.h>
 #undef main
+
+#ifdef __DREAMCAST__
+#include <kos.h>
+#include <SDL_dreamcast.h>
+#endif
 
 #include <sys/types.h>
 #include <ctype.h>
@@ -53,8 +53,10 @@ int main(int argc, char ** argv)
   st_general_setup();
 
   SDL_ShowCursor(false);
+#ifdef __DREAMCAST__
   SDL_DC_EmulateKeyboard(SDL_FALSE);
   SDL_DC_EmulateMouse(SDL_FALSE);
+#endif
 
   fadeout();
 
