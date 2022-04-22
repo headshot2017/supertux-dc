@@ -415,7 +415,7 @@ WorldMap::WorldMap()
 WorldMap::~WorldMap()
 {
   delete tux;
-  //delete tile_manager;
+  delete tile_manager;
 
   deleteSprites();
 }
@@ -426,7 +426,7 @@ void WorldMap::loadSprites()
 	leveldot_green = new Surface(datadir +  "/images/worldmap/leveldot_green.png", USE_ALPHA);
 	leveldot_red = new Surface(datadir +  "/images/worldmap/leveldot_red.png", USE_ALPHA);
 	leveldot_teleporter = new Surface(datadir +  "/images/worldmap/teleporter.png", USE_ALPHA);
-	tile_manager = new TileManager();
+	//tile_manager = new TileManager();
 }
 
 void WorldMap::deleteSprites()
@@ -435,12 +435,12 @@ void WorldMap::deleteSprites()
 	if (leveldot_green) delete leveldot_green;
 	if (leveldot_red) delete leveldot_red;
 	if (leveldot_teleporter) delete leveldot_teleporter;
-	if (tile_manager) delete tile_manager;
+	//if (tile_manager) delete tile_manager;
 	level_sprite = 0;
 	leveldot_green = 0;
 	leveldot_red = 0;
 	leveldot_teleporter = 0;
-	tile_manager = 0;
+	//tile_manager = 0;
 }
 
 void
@@ -525,6 +525,8 @@ WorldMap::load_map()
                       reader.read_string("title",  &level.title);
                       //if(!level.name.empty())
                         //get_level_title(&level);   // get level's title
+
+                      level.name = ReplaceAll(level.name, "-", ""); // cdfs doesn't like minus sign in filenames
 
                       levels.push_back(level);
                     }
