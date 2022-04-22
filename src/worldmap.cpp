@@ -660,20 +660,6 @@ WorldMap::get_input()
             case SDL_JOYBUTTONDOWN:
               if (event.jbutton.button == joystick_keymap.a_button)
                 enter_level = true;
-              else if (event.jbutton.button == joystick_keymap.x_button)
-              {
-                for(Levels::iterator i = levels.begin(); i != levels.end(); ++i)
-                {
-                   i->solved = true;
-                }
-              }
-              else if (event.jbutton.button == joystick_keymap.y_button)
-              {
-                for(Levels::iterator i = levels.begin(); i != levels.end(); ++i)
-                {
-                   i->solved = false;
-                }
-              }
               else if (event.jbutton.button == joystick_keymap.start_button)
                 on_escape_press();
               break;
