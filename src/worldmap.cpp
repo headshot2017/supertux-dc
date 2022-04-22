@@ -526,7 +526,9 @@ WorldMap::load_map()
                       //if(!level.name.empty())
                         //get_level_title(&level);   // get level's title
 
-                      level.name = ReplaceAll(level.name, "-", ""); // cdfs doesn't like minus sign in filenames
+                      // cdfs doesn't like minus sign in filenames
+                      level.extro_filename = ReplaceAll(level.extro_filename, "-", "");
+                      level.name = ReplaceAll(level.name, "-", "");
 
                       levels.push_back(level);
                     }
