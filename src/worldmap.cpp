@@ -415,7 +415,7 @@ WorldMap::WorldMap()
 WorldMap::~WorldMap()
 {
   delete tux;
-  delete tile_manager;
+  //delete tile_manager;
 
   deleteSprites();
 }
@@ -426,6 +426,7 @@ void WorldMap::loadSprites()
 	leveldot_green = new Surface(datadir +  "/images/worldmap/leveldot_green.png", USE_ALPHA);
 	leveldot_red = new Surface(datadir +  "/images/worldmap/leveldot_red.png", USE_ALPHA);
 	leveldot_teleporter = new Surface(datadir +  "/images/worldmap/teleporter.png", USE_ALPHA);
+	tile_manager = new TileManager();
 }
 
 void WorldMap::deleteSprites()
@@ -434,10 +435,12 @@ void WorldMap::deleteSprites()
 	if (leveldot_green) delete leveldot_green;
 	if (leveldot_red) delete leveldot_red;
 	if (leveldot_teleporter) delete leveldot_teleporter;
+	if (tile_manager) delete tile_manager;
 	level_sprite = 0;
 	leveldot_green = 0;
 	leveldot_red = 0;
 	leveldot_teleporter = 0;
+	tile_manager = 0;
 }
 
 void
@@ -653,6 +656,20 @@ WorldMap::get_input()
             case SDL_JOYBUTTONDOWN:
               if (event.jbutton.button == joystick_keymap.a_button)
                 enter_level = true;
+              else if (event.jbutton.button == joystick_keymap.x_button)
+              {
+                for(Levels::iterator i = levels.begin(); i != levels.end(); ++i)
+                {
+                   i->solved = true;
+                }
+              }
+              else if (event.jbutton.button == joystick_keymap.y_button)
+              {
+                for(Levels::iterator i = levels.begin(); i != levels.end(); ++i)
+                {
+                   i->solved = false;
+                }
+              }
               else if (event.jbutton.button == joystick_keymap.start_button)
                 on_escape_press();
               break;
@@ -855,7 +872,7 @@ WorldMap::update(float delta)
 			if (level->x == tux->get_tile_pos().x && 
               level->y == tux->get_tile_pos().y)
 				{
-					play_sound(sounds[SND_TELEPORT], SOUND_CENTER_SPEAKER);
+					//play_sound(sounds[SND_TELEPORT], SOUND_CENTER_SPEAKER);
 					tux->back_direction = D_NONE;
 					tux->set_tile_pos(Point(level->teleport_dest_x, level->teleport_dest_y));
 					SDL_Delay(1000);
