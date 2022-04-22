@@ -590,14 +590,14 @@ void st_general_setup(void)
 
   black_text  = new Text(datadir + "/images/status/lettersblack.png", TEXT_TEXT, 16,18);
   gold_text   = new Text(datadir + "/images/status/lettersgold.png", TEXT_TEXT, 16,18);
-  silver_text = new Text(datadir + "/images/status/letterssilver.png", TEXT_TEXT, 16,18);
+  //silver_text = new Text(datadir + "/images/status/letterssilver.png", TEXT_TEXT, 16,18);
   blue_text   = new Text(datadir + "/images/status/lettersblue.png", TEXT_TEXT, 16,18);
-  red_text    = new Text(datadir + "/images/status/lettersred.png", TEXT_TEXT, 16,18);
-  green_text  = new Text(datadir + "/images/status/lettersgreen.png", TEXT_TEXT, 16,18);
+  //red_text    = new Text(datadir + "/images/status/lettersred.png", TEXT_TEXT, 16,18);
+  //green_text  = new Text(datadir + "/images/status/lettersgreen.png", TEXT_TEXT, 16,18);
   white_text  = new Text(datadir + "/images/status/letterswhite.png", TEXT_TEXT, 16,18);
   white_small_text = new Text(datadir + "/images/status/letterswhitesmall.png", TEXT_TEXT, 8,9);
   white_big_text   = new Text(datadir + "/images/status/letterswhitebig.png", TEXT_TEXT, 20,22);
-  yellow_nums = new Text(datadir + "/images/status/numbers.png", TEXT_NUM, 32,32);
+  //yellow_nums = new Text(datadir + "/images/status/numbers.png", TEXT_NUM, 32,32);
 
   /* Load GUI/menu images: */
   checkbox = new Surface(datadir + "/images/status/checkbox.png", USE_ALPHA);
@@ -618,14 +618,14 @@ void st_general_free(void)
   /* Free global images: */
   delete black_text;
   delete gold_text;
-  delete silver_text;
+  //delete silver_text;
   delete white_text;
   delete blue_text;
-  delete red_text;
-  delete green_text;
+  //delete red_text;
+  //delete green_text;
   delete white_small_text;
   delete white_big_text;
-  delete yellow_nums;
+  //delete yellow_nums;
 
   /* Free GUI/menu images: */
   delete checkbox;
