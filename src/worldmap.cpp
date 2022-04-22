@@ -1099,7 +1099,7 @@ WorldMap::savegame(const std::string& filename)
 
   out << "(supertux-savegame\n"
       << "  (version 1)\n"
-      << "  (title  \"Icyisland - " << nb_solved_levels << "/" << levels.size() << "\")\n"
+      << "  (title  \"" << name << " - " << nb_solved_levels << "/" << levels.size() << "\")\n"
       << "  (lives   " << player_status.lives << ")\n"
       << "  (score   " << player_status.score << ")\n"
       << "  (distros " << player_status.distros << ")\n"
@@ -1122,7 +1122,7 @@ WorldMap::savegame(const std::string& filename)
 
   FILE* f = fopen(filename.c_str(), "w");
   char desc[128];
-  sprintf(desc, "Icyisland - %d/%d", nb_solved_levels, levels.size());
+  sprintf(desc, "%s - %d/%d", name.c_str(), nb_solved_levels, levels.size());
 
 #ifdef __DREAMCAST__
   saveToVMU(f, out.str().c_str(), desc);
