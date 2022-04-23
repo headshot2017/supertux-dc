@@ -533,7 +533,7 @@ GameSession::draw()
       //mouse_cursor->draw();
     }
 
-  updatescreen();
+  flipscreen();
 }
 
 void
