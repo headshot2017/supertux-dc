@@ -27,6 +27,11 @@
 #include <unistd.h>
 #include <SDL.h>
 #include <SDL_image.h>
+
+#ifdef __DREAMCAST__
+#include <SDL_dreamcast.h>
+#endif
+
 #ifndef NOOPENGL
 #include <SDL_opengl.h>
 #endif
@@ -674,7 +679,7 @@ void st_video_setup_sdl(void)
 {
   if (use_fullscreen)
     {
-      screen = SDL_SetVideoMode(SCREEN_W, SCREEN_H, 0, SDL_FULLSCREEN ) ; /* | SDL_HWSURFACE); */
+      screen = SDL_SetVideoMode(SCREEN_W, SCREEN_H, 0, SDL_FULLSCREEN | SDL_HWSURFACE | SDL_DOUBLEBUF ) ; /* | SDL_HWSURFACE); */
       if (screen == NULL)
         {
           fprintf(stderr,
@@ -782,6 +787,7 @@ void st_joystick_setup(void)
         }
       else
         {
+          SDL_JoystickEventState(SDL_ENABLE);
           js = SDL_JoystickOpen(joystick_num);
 
           if (js == NULL)
@@ -794,6 +800,19 @@ void st_joystick_setup(void)
             }
           else
             {
+
+#ifdef __DREAMCAST__
+              /*SDL_DC_MapKey(joystick_num, SDL_DC_LEFT, SDLK_LEFT);
+              SDL_DC_MapKey(joystick_num, SDL_DC_RIGHT, SDLK_RIGHT);
+              SDL_DC_MapKey(joystick_num, SDL_DC_UP, SDLK_UP);
+              SDL_DC_MapKey(joystick_num, SDL_DC_DOWN, SDLK_DOWN);
+              SDL_DC_MapKey(joystick_num, SDL_DC_A, SDLK_LCTRL);
+              SDL_DC_MapKey(joystick_num, SDL_DC_X, SDLK_SPACE);
+              SDL_DC_MapKey(joystick_num, SDL_DC_B, SDLK_LCTRL);
+              SDL_DC_MapKey(joystick_num, SDL_DC_Y, SDLK_SPACE);
+              SDL_DC_MapKey(joystick_num, SDL_DC_START, SDLK_ESCAPE);*/
+#endif
+
               if (SDL_JoystickNumAxes(js) < 2)
                 {
                   fprintf(stderr,
