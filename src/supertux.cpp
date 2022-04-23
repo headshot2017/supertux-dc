@@ -48,16 +48,16 @@ int main(int argc, char ** argv)
   st_directory_setup();
   parseargs(argc, argv);
 
-  // get a loading screen up and running quickly because this will take a while
+#ifdef __DREAMCAST__
+  SDL_DC_SetVideoDriver(SDL_DC_DMA_VIDEO);
+  //SDL_DC_EmulateKeyboard(SDL_FALSE);
+  SDL_DC_EmulateMouse(SDL_FALSE);
+#endif
+
   st_video_setup();
   st_general_setup();
 
   SDL_ShowCursor(false);
-#ifdef __DREAMCAST__
-  SDL_DC_EmulateKeyboard(SDL_FALSE);
-  SDL_DC_EmulateMouse(SDL_FALSE);
-#endif
-
   fadeout();
 
   st_audio_setup();
