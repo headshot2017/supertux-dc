@@ -6,7 +6,7 @@
 # Put the filename of the output binary here
 TARGET = supertux.elf
 
-CXXFLAGS += -D__DREAMCAST__ -DNOOPENGL -I$(KOS_PORTS)/include/zlib -Iports/SDL-dreamhal--GLDC/include
+CXXFLAGS += -D__DREAMCAST__ -DNOOPENGL -I$(KOS_PORTS)/include/zlib -Iports/SDL-dreamhal/include
 
 # List all of your C files here, but change the extension to ".o"
 # Include "romdisk.o" if you want a rom disk.

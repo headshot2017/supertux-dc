@@ -1,6 +1,6 @@
 TARGET=libSDL_mixer.a
 
-KOS_CFLAGS+= -DWAV_MUSIC -DMODPLUG_MUSIC -DOGG_MUSIC -I../SDL-dreamhal--GLDC/include -I../libmodplug/include -I$(KOS_PORTS)/include/vorbis -I$(KOS_PORTS)/include/ogg
+KOS_CFLAGS+= -DWAV_MUSIC -DMODPLUG_MUSIC -DOGG_MUSIC -I../SDL-dreamhal/include -I../libmodplug/include -I$(KOS_PORTS)/include/vorbis -I$(KOS_PORTS)/include/ogg
 
 all: $(TARGET)
 
