@@ -22,6 +22,7 @@
 #include <string.h>
 #include "globals.h"
 #include "defines.h"
+#include "dreamcast.h"
 #include "screen.h"
 #include "text.h"
 
@@ -222,7 +223,6 @@ Text::erasecenteredtext(const  char * text, int y, Surface * ptexture, int updat
   erasetext(text, screen->w / 2 - (strlen(text) * 8), y, ptexture, update, shadowsize);
 }
 
-
 /* --- SCROLL TEXT FUNCTION --- */
 
 #define MAX_VEL     10
@@ -280,11 +280,25 @@ void display_text_file(const std::string& file, Surface* surface, float scroll_s
   Uint32 lastticks = SDL_GetTicks();
   while(done == 0)
     {
+#ifdef __DREAMCAST__
+      uint32 pressed = getPressed(0);
+
+      if (pressed & CONT_A && speed >= 0)
+          scroll += SCROLL;
+      else if (pressed & CONT_START)
+          done = 1;
+      else if (pressed & CONT_DPAD_UP)
+          speed -= SPEED_INC;
+      else if (pressed & CONT_DPAD_DOWN)
+          speed += SPEED_INC;
+#endif
+
       /* in case of input, exit */
       SDL_Event event;
       while(SDL_PollEvent(&event))
         switch(event.type)
           {
+#ifndef __DREAMCAST__
           case SDL_JOYHATMOTION:
               switch(event.jhat.value)
               {
@@ -308,6 +322,7 @@ void display_text_file(const std::string& file, Surface* surface, float scroll_s
                       break;
               }
               break;
+#endif
 
           case SDL_KEYDOWN:
             switch(event.key.keysym.sym)

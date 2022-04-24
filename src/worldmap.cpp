@@ -598,7 +598,28 @@ WorldMap::get_input()
 {
   enter_level = false;
   input_direction = D_NONE;
-   
+
+#ifdef __DREAMCAST__
+  if (!Menu::current())
+  {
+      uint32 pressed = getPressed(0);
+
+      if (pressed & CONT_DPAD_LEFT)
+          input_direction = D_WEST;
+      if (pressed & CONT_DPAD_RIGHT)
+          input_direction = D_EAST;
+      if (pressed & CONT_DPAD_UP)
+          input_direction = D_NORTH;
+      if (pressed & CONT_DPAD_DOWN)
+          input_direction = D_SOUTH;
+
+      if (pressed & CONT_A)
+          enter_level = true;
+      else if (pressed & CONT_START)
+          on_escape_press();
+  }
+#endif
+
   SDL_Event event;
   while (SDL_PollEvent(&event))
     {
@@ -628,7 +649,8 @@ WorldMap::get_input()
                   break;
                 }
               break;
-          
+
+#ifndef __DREAMCAST__          
             case SDL_JOYAXISMOTION:
               if (event.jaxis.axis == joystick_keymap.x_axis)
                 {
@@ -663,6 +685,7 @@ WorldMap::get_input()
               else if (event.jbutton.button == joystick_keymap.start_button)
                 on_escape_press();
               break;
+#endif
 
             default:
               break;

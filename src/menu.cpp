@@ -30,6 +30,7 @@
 
 #include "configfile.h"
 #include "defines.h"
+#include "dreamcast.h"
 #include "globals.h"
 #include "menu.h"
 #include "screen.h"
@@ -755,10 +756,24 @@ Menu::isToggled(int id)
   return *get_item_by_id(id).toggled;
 }
 
+
 /* Check for menu event */
 void
 Menu::event(SDL_Event& event)
 {
+#ifdef __DREAMCAST__
+  uint32 pressed = getPressed(0);
+  
+  if(pressed & CONT_A)
+      menuaction = MENU_ACTION_HIT;
+  else if (pressed & CONT_B)
+      Menu::pop_current();
+  else if (pressed & CONT_DPAD_UP)
+      menuaction = MENU_ACTION_UP;
+  else if (pressed & CONT_DPAD_DOWN)
+      menuaction = MENU_ACTION_DOWN;
+#endif
+
   SDLKey key;
   switch(event.type)
   {
@@ -839,6 +854,8 @@ Menu::event(SDL_Event& event)
       break;
     }
     break;
+
+#ifndef __DREAMCAST__
   case  SDL_JOYHATMOTION:
       if(event.jhat.value == SDL_HAT_UP)
            menuaction = MENU_ACTION_UP;
@@ -857,6 +874,8 @@ Menu::event(SDL_Event& event)
   case  SDL_JOYBUTTONDOWN:
     menuaction = MENU_ACTION_HIT;
     break;
+#endif
+
   case SDL_MOUSEBUTTONDOWN:
     x = event.motion.x;
     y = event.motion.y;

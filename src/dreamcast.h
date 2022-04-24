@@ -9,6 +9,8 @@
 vmu_pkg_t loadFromVMU(FILE* f);
 void saveToVMU(FILE* f, const char* data, const char* longdesc);
 
+uint32 getPressed(int port=0);
+
 #endif // __DREAMCAST__
 #endif // SUPERTUX_DREAMCAST_H
 

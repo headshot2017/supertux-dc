@@ -28,6 +28,10 @@
 #include "menu.h"
 #include "mousecursor.h"
 
+#ifdef __DREAMCAST__
+#include <kos.h>
+#endif
+
 extern std::string datadir;
 
 struct JoystickKeymap

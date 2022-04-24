@@ -39,5 +39,58 @@ void saveToVMU(FILE* f, const char* data, const char* longdesc)
 	fwrite(pkg_out, 1, pkg_size, f);
 }
 
+
+uint32 lastPressed[4] = {0, 0, 0, 0};
+uint32 btns[] = {
+	CONT_A,
+	CONT_B,
+	CONT_X,
+	CONT_Y,
+	CONT_START,
+	CONT_DPAD_UP,
+	CONT_DPAD_DOWN,
+	CONT_DPAD_LEFT,
+	CONT_DPAD_RIGHT,
+};
+uint32 btnSize = sizeof(btns) / sizeof(uint32);
+
+// check if a button has been pressed (NOT when held down, useful for menus or something)
+uint32 getPressed(int port)
+{
+	maple_device_t *cont = maple_enum_type(port, MAPLE_FUNC_CONTROLLER);
+	cont_state_t *state;
+	uint32 pressed = lastPressed[port];
+	bool update = false;
+
+	if (cont)
+	{
+		state = (cont_state_t *)maple_dev_status(cont);
+
+		if (state)
+		{
+			for (uint32 i=0; i<btnSize; i++)
+			{
+				if (state->buttons & btns[i] && !(lastPressed[port] & btns[i]))
+				{
+					pressed |= btns[i]; // this button has been pressed, add it
+					update = true;
+				}
+				else if (state->buttons & btns[i] && lastPressed[port] & btns[i])
+					pressed &= ~btns[i]; // this button was already pressed, ignore it
+				else if (!(state->buttons & btns[i]) && lastPressed[port] & btns[i])
+				{
+					pressed &= ~btns[i]; // button has been released
+					update = true;
+				}
+			}
+
+			if (update)
+				lastPressed[port] = pressed;
+		}
+	}
+
+	return pressed;
+}
+
 #endif // __DREAMCAST__
 
