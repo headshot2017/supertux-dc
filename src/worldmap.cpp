@@ -23,6 +23,10 @@
 #include <assert.h>
 #include <unistd.h>
 
+#ifdef __DREAMCAST__
+#include <mp3/sndserver.h>
+#endif
+
 #include "dreamcast.h"
 #include "globals.h"
 #include "texture.h"
