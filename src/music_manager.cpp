@@ -100,6 +100,7 @@ MusicManager::play_music(const MusicRef& musicref, int loops)
   if(musicref.music == 0 || current_music == musicref.music)
     return;
 
+  Mix_HaltMusic();
   if(current_music)
     current_music->refcount--;
   

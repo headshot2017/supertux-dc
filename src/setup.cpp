@@ -841,13 +841,13 @@ void st_audio_setup(void)
 
   /* Init SDL Audio silently even if --disable-sound : */
 
+  /*
   if (audio_device)
     {
       if (SDL_Init(SDL_INIT_AUDIO) < 0)
         {
-          /* only print out message if sound or music
-             was not disabled at command-line
-           */
+          // only print out message if sound or music
+          // was not disabled at command-line
           if (use_sound || use_music)
             {
               fprintf(stderr,
@@ -855,15 +855,15 @@ void st_audio_setup(void)
                       "The Simple DirectMedia error that occured was:\n"
                       "%s\n\n", SDL_GetError());
             }
-          /* keep the programming logic the same :-)
-             because in this case, use_sound & use_music' values are ignored
-             when there's no available audio device
-          */
+          // keep the programming logic the same :-)
+          // because in this case, use_sound & use_music' values are ignored
+          // when there's no available audio device
+          //
           use_sound = false;
           use_music = false;
           audio_device = false;
         }
-    }
+    }*/
 
 
   /* Open sound silently regarless the value of "use_sound": */

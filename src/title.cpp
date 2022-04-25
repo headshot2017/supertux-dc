@@ -30,6 +30,7 @@
 
 #ifdef __DREAMCAST__
 #include <kos.h>
+#include <mp3/sndserver.h>
 #endif
 
 #ifndef WIN32
@@ -443,11 +444,10 @@ void title(void)
                   Menu::set_current(main_menu);
                   break;
                 case MNID_CREDITS:
-                  menu_song = music_manager->load_music(datadir + "/music/credits.ogg");
                   music_manager->halt_music();
-                  music_manager->play_music(menu_song,0);
+                  mp3_start((datadir + "/music/credits.mp3").c_str(), 0);
                   display_text_file("CREDITS", bkg_title, SCROLL_SPEED_CREDITS);
-                  music_manager->halt_music();
+                  mp3_stop();
                   session->get_world()->play_music(LEVEL_MUSIC);
                   Menu::set_current(main_menu);
                   break;

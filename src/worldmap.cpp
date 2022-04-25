@@ -844,14 +844,15 @@ WorldMap::update(float delta)
                         unloadsounds();
                         MusicRef theme =
                           music_manager->load_music(datadir + "/music/theme.mod");
-                        MusicRef credits = music_manager->load_music(datadir + "/music/credits.ogg");
                         music_manager->play_music(theme);
                         // Display final credits and go back to the main menu
                         display_text_file(level->extro_filename,
                                           "/images/background/extro.jpg", SCROLL_SPEED_MESSAGE);
-			music_manager->play_music(credits,0);
-			display_text_file("CREDITS",
+                        music_manager->halt_music();
+                        mp3_start((datadir + "/music/credits.mp3").c_str(), 0);
+                        display_text_file("CREDITS",
                                           "/images/background/oiltux.jpg", SCROLL_SPEED_CREDITS);
+                        mp3_stop();
                         music_manager->play_music(theme);
                         quit = true;
                       }

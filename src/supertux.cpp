@@ -25,6 +25,7 @@
 #ifdef __DREAMCAST__
 #include <kos.h>
 #include <SDL_dreamcast.h>
+#include <mp3/sndserver.h>
 #endif
 
 #include <sys/types.h>
@@ -64,6 +65,11 @@ int main(int argc, char ** argv)
   st_joystick_setup();
   st_menu();
   loadshared();
+
+#ifdef __DREAMCAST__
+  snd_stream_init();
+  mp3_init();
+#endif
 
   title();
   

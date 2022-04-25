@@ -83,8 +83,8 @@ int open_audio (int frequency, Uint16 format, int channels, int chunksize)
 void close_audio( void )
 {
   if (audio_device) {
-    Mix_UnregisterAllEffects( SOUND_LEFT_SPEAKER );
-    Mix_UnregisterAllEffects( SOUND_RIGHT_SPEAKER );
+    //Mix_UnregisterAllEffects( SOUND_LEFT_SPEAKER );
+    //Mix_UnregisterAllEffects( SOUND_RIGHT_SPEAKER );
     Mix_CloseAudio();
   }
 }
