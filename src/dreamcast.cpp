@@ -52,7 +52,7 @@ uint32 btns[] = {
 	CONT_DPAD_LEFT,
 	CONT_DPAD_RIGHT,
 };
-uint32 btnSize = sizeof(btns) / sizeof(uint32);
+uint32 btnSize = 9;
 
 // check if a button has been pressed (NOT when held down, useful for menus or something)
 uint32 getPressed(int port)
