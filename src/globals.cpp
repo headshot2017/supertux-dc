@@ -19,6 +19,7 @@
 //  02111-1307, USA.
 
 #include "globals.h"
+#include "dreamcast.h"
 
 /** The datadir prefix prepended when loading game data file */
 std::string datadir;
@@ -100,6 +101,11 @@ int wait_for_event(SDL_Event& event,unsigned int min_delay, unsigned int max_del
 
   for(i = 0; maxdelay.check() || !i; ++i)
     {
+#ifdef __DREAMCAST__
+      if (!mindelay.check() && getPressed())
+          return 1;
+#endif
+
       while (SDL_PollEvent(&event))
         {
           if(!mindelay.check())
