@@ -230,6 +230,11 @@ GameSession::process_events()
 
       last_x_pos = tux.base.x;
 
+#ifdef __DREAMCAST__
+      if (Menu::current())
+          Menu::current()->DCevent();
+#endif
+
       SDL_Event event;
       while (SDL_PollEvent(&event))
         {
@@ -278,26 +283,31 @@ GameSession::process_events()
       Player& tux = *world->get_tux();
 
 #ifdef __DREAMCAST__
-      maple_device_t *cont = maple_enum_type(0, MAPLE_FUNC_CONTROLLER);
-      cont_state_t *state;
-      if (cont)
+      if (!Menu::current())
       {
-          state = (cont_state_t *)maple_dev_status(cont);
-
-          if (state)
+          maple_device_t *cont = maple_enum_type(0, MAPLE_FUNC_CONTROLLER);
+          cont_state_t *state;
+          if (cont)
           {
-              uint32 pressed = getPressed(0);
+              state = (cont_state_t *)maple_dev_status(cont);
 
-              tux.input.fire = (state->buttons & CONT_A || state->buttons & CONT_B) ? DOWN : UP;
-              tux.input.up = (state->buttons & CONT_X || state->buttons & CONT_Y) ? DOWN : UP;
-              tux.input.down = (state->buttons & CONT_DPAD_DOWN) ? DOWN : UP;
-              tux.input.left = (state->buttons & CONT_DPAD_LEFT) ? DOWN : UP;
-              tux.input.right = (state->buttons & CONT_DPAD_RIGHT) ? DOWN : UP;
+              if (state)
+              {
+                  uint32 pressed = getPressed(0);
 
-              if (pressed & CONT_START)
-                  on_escape_press();
+                  tux.input.fire = (state->buttons & CONT_A || state->buttons & CONT_B) ? DOWN : UP;
+                  tux.input.up = (state->buttons & CONT_X || state->buttons & CONT_Y) ? DOWN : UP;
+                  tux.input.down = (state->buttons & CONT_DPAD_DOWN) ? DOWN : UP;
+                  tux.input.left = (state->buttons & CONT_DPAD_LEFT) ? DOWN : UP;
+                  tux.input.right = (state->buttons & CONT_DPAD_RIGHT) ? DOWN : UP;
+
+                  if (pressed & CONT_START)
+                      on_escape_press();
+              }
           }
       }
+      else
+          Menu::current()->DCevent();
 #endif
 
       SDL_Event event;

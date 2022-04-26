@@ -622,6 +622,8 @@ WorldMap::get_input()
       else if (pressed & CONT_START)
           on_escape_press();
   }
+  else
+      Menu::current()->DCevent();
 #endif
 
   SDL_Event event;

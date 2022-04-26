@@ -361,6 +361,10 @@ void title(void)
       /* Lower the frame_ratio that Tux doesn't jump to hectically throught the demo. */
       frame_ratio /= 2;
 
+#ifdef __DREAMCAST__
+      Menu::current()->DCevent();
+#endif
+
       SDL_Event event;
       while (SDL_PollEvent(&event))
         {

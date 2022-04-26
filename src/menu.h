@@ -227,6 +227,10 @@ public:
   void draw_item(int index, int menu_width, int menu_height);
   void set_pos(int x, int y, float rw = 0, float rh = 0);
 
+#ifdef __DREAMCAST__
+  void DCevent();
+#endif
+
   /** translate a SDL_Event into a menu_action */
   void event(SDL_Event& event);
 

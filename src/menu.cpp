@@ -756,12 +756,10 @@ Menu::isToggled(int id)
   return *get_item_by_id(id).toggled;
 }
 
-
-/* Check for menu event */
-void
-Menu::event(SDL_Event& event)
-{
 #ifdef __DREAMCAST__
+// DC input events
+void Menu::DCevent()
+{
   uint32 pressed = getPressed(0);
   
   if(pressed & CONT_A)
@@ -772,8 +770,13 @@ Menu::event(SDL_Event& event)
       menuaction = MENU_ACTION_UP;
   else if (pressed & CONT_DPAD_DOWN)
       menuaction = MENU_ACTION_DOWN;
+}
 #endif
 
+/* Check for menu event */
+void
+Menu::event(SDL_Event& event)
+{
   SDLKey key;
   switch(event.type)
   {

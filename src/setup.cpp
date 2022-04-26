@@ -763,6 +763,9 @@ void st_video_setup_gl(void)
 
 void st_joystick_setup(void)
 {
+#ifdef __DREAMCAST__
+  use_joystick = false; // get inputs directly from maple
+#else
 
   /* Init Joystick: */
 
@@ -800,19 +803,6 @@ void st_joystick_setup(void)
             }
           else
             {
-
-#ifdef __DREAMCAST__
-              /*SDL_DC_MapKey(joystick_num, SDL_DC_LEFT, SDLK_LEFT);
-              SDL_DC_MapKey(joystick_num, SDL_DC_RIGHT, SDLK_RIGHT);
-              SDL_DC_MapKey(joystick_num, SDL_DC_UP, SDLK_UP);
-              SDL_DC_MapKey(joystick_num, SDL_DC_DOWN, SDLK_DOWN);
-              SDL_DC_MapKey(joystick_num, SDL_DC_A, SDLK_LCTRL);
-              SDL_DC_MapKey(joystick_num, SDL_DC_X, SDLK_SPACE);
-              SDL_DC_MapKey(joystick_num, SDL_DC_B, SDLK_LCTRL);
-              SDL_DC_MapKey(joystick_num, SDL_DC_Y, SDLK_SPACE);
-              SDL_DC_MapKey(joystick_num, SDL_DC_START, SDLK_ESCAPE);*/
-#endif
-
               if (SDL_JoystickNumAxes(js) < 2)
                 {
                   fprintf(stderr,
@@ -834,6 +824,7 @@ void st_joystick_setup(void)
             }
         }
     }
+#endif
 }
 
 void st_audio_setup(void)

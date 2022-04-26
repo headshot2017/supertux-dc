@@ -67,6 +67,7 @@ int main(int argc, char ** argv)
   loadshared();
 
 #ifdef __DREAMCAST__
+  maple_init();
   snd_stream_init();
   mp3_init();
 #endif
