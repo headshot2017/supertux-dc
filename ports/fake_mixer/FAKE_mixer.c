@@ -11,7 +11,7 @@ int loaded=0;
 int gfrequency=0;
 int gchannels=0;
 UBYTE voicevolume=255;
-int musicvolume=32;
+int musicvolume=128;
 int v1;
 
 static void *snd_thread(void *data)
@@ -20,7 +20,7 @@ static void *snd_thread(void *data)
 	for(;;)
 	{
 		MikMod_Update();
-		thd_sleep(5);
+		thd_sleep(1);
 	}
 	
 	return NULL;
@@ -67,7 +67,9 @@ void Mix_CloseAudio(void)
 
 void Mix_FreeChunk(Mix_Chunk *chunk)
 {
-	Sample_Free((SAMPLE *)chunk);
+	free(chunk);
+
+	//Sample_Free((SAMPLE *)chunk);
 }
 
 int Mix_PlayChannel(int channel, Mix_Chunk *chunk, int loops)
@@ -77,6 +79,9 @@ int Mix_PlayChannel(int channel, Mix_Chunk *chunk, int loops)
 
 int Mix_PlayChannelTimed(int channel, Mix_Chunk *chunk, int loops, int ticks)
 {
+	return snd_sfx_play(chunk->handle, chunk->volume, 128);
+
+/*
 	SAMPLE *sample;
 	sample=(SAMPLE *)chunk;
 	
@@ -86,6 +91,7 @@ int Mix_PlayChannelTimed(int channel, Mix_Chunk *chunk, int loops, int ticks)
 	sample->panning = PAN_CENTER;
 	v1 = Sample_Play(sample, 0, 0);
 	return 0;
+*/
 }
 
 int Mix_HaltChannel(int channel)
@@ -119,8 +125,21 @@ void Mix_Pause(int channel)
 
 Mix_Chunk *Mix_LoadWAV(const char *file)
 {
+	sfxhnd_t snd = snd_sfx_load(file);
+	if (!snd)
+	{
+		printf("Failed to load sample.\n");
+		return NULL;
+	}
+
+	Mix_Chunk* chunk = (Mix_Chunk*)malloc(sizeof(Mix_Chunk));
+	chunk->handle = snd;
+	chunk->volume = 255;
+	return chunk;
+
+/*
 	SAMPLE *sample;
-    /* load module */
+    // load module
     sample = Sample_Load(file);
     if (sample) {
 		return (Mix_Chunk *) sample;
@@ -129,18 +148,26 @@ Mix_Chunk *Mix_LoadWAV(const char *file)
         printf("Could not load sample, reason: %s\n", MikMod_strerror(MikMod_errno));
 	}
 	return NULL;
+*/
 }
 
 //0-255
 int Mix_VolumeChunk(Mix_Chunk *chunk, int volume)
 {
+	/*
 	voicevolume = volume;
 	if (Voice_Stopped(v1) == 0) Voice_SetVolume(v1, volume);
+	return volume;
+	*/
+
+	chunk->volume = 255;
 	return volume;
 }
 
 Mix_Chunk *Mix_LoadWAV_RW(SDL_RWops *src, int freesrc)
 {
+
+/*
 	SAMPLE *sample;
    	struct MREADER* reader = _mm_new_rwops_reader (src);
    	if (reader) {
@@ -152,6 +179,8 @@ Mix_Chunk *Mix_LoadWAV_RW(SDL_RWops *src, int freesrc)
 	{
         printf("Could not load sample, reason: %s\n", MikMod_strerror(MikMod_errno));
 	}
+*/
+
 	return NULL;
 }
 
@@ -224,7 +253,7 @@ int Mix_PlayMusic(Mix_Music *music, int loops)
 	}
 	
 	//Set music volume before playing
-	module->volume = 32;
+	module->volume = musicvolume;
 	Player_Start(module);
 	
 	if (mix_music){

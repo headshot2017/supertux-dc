@@ -59,7 +59,7 @@
 
 #include "mikmod_internals.h"
 
-#define COPY_BUFSIZE  1024
+#define COPY_BUFSIZE  512
 
 static long _mm_iobase=0;
 

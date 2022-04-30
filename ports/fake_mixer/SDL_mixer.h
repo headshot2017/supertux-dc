@@ -2,6 +2,7 @@
 #ifndef _FAKE_MIXER_H
 #define _FAKE_MIXER_H
 
+#include <sound/sfxmgr.h>
 #include <SDL/SDL.h>
 #include "mikmod.h"
 
@@ -11,12 +12,19 @@
 
 #define Mix_GetError		SDL_GetError
 #define Mix_Music			void
-#define Mix_Chunk			void
+//#define Mix_Chunk			void
 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+struct _Mix_Chunk
+{
+	sfxhnd_t handle;
+	int volume;
+};
+typedef struct _Mix_Chunk Mix_Chunk;
 
 int Mix_OpenAudio(int frequency, uint16 format, int channels, int chunksize);
 void Mix_CloseAudio(void);

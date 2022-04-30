@@ -1,0 +1,45 @@
+1 VERSIONINFO
+FILEVERSION 0,1,5,0
+PRODUCTVERSION 0,1,5,0
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040904E4"
+    BEGIN
+      VALUE "FileDescription", "W3MikMod"
+      VALUE "FileVersion", "0.1.5"
+      VALUE "InternalName", "W3MikMod"
+      VALUE "LegalCopyright", "Toyoyo - toyoyo@wirefull.org"
+      VALUE "OriginalFilename", "w3mikmod.exe"
+      VALUE "ProductName", "W3MikMod"
+      VALUE "ProductVersion", "0.1.5"
+    END
+  END
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x409, 1252
+  END
+END
+
+0 ICON "res/icon.ico"
+2 BITMAP "res/toolbar.bmp"
+3 ICON "res/samples.ico"
+4 ICON "res/instr.ico"
+5 ICON "res/vol.ico"
+
+6 ACCELERATORS
+{
+  0x4F, 2000, VIRTKEY
+  0x52, 2001, VIRTKEY
+  0x47, 2002, VIRTKEY
+  0x20, 2003, VIRTKEY
+  0x53, 2004, VIRTKEY
+  0x49, 2005, VIRTKEY
+  0x50, 2006, VIRTKEY
+  0x4E, 2007, VIRTKEY
+  0x48, 2008, VIRTKEY
+  0x56, 2009, VIRTKEY
+  "+", 3101, ASCII
+  "-", 3102, ASCII
+  0x4C, 3103, VIRTKEY
+}
