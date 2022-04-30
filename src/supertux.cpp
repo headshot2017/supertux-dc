@@ -50,6 +50,9 @@ int main(int argc, char ** argv)
   parseargs(argc, argv);
 
 #ifdef __DREAMCAST__
+  // reset to ODE (GDemu) when these buttons are pressed
+  cont_btn_callback(0, CONT_START | CONT_A | CONT_B | CONT_X | CONT_Y, (cont_btn_callback_t)arch_reboot);
+
   SDL_DC_SetVideoDriver(SDL_DC_DMA_VIDEO);
   //SDL_DC_EmulateKeyboard(SDL_FALSE);
   SDL_DC_EmulateMouse(SDL_FALSE);
