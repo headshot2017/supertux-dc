@@ -27,6 +27,10 @@
 #include "sprite.h"
 #include "screen.h"
 
+#ifdef __DREAMCAST__
+#include <sh4_math.h>
+#endif
+
 #define AUTOSCROLL_DEAD_INTERVAL 300
 
 Surface* tux_life;
@@ -329,13 +333,21 @@ Player::handle_horizontal_input()
   }
 
   // we can reach WALK_SPEED without any acceleration
+#ifdef __DREAMCAST__
+  if(dirsign != 0 && MATH_fabs(vx) < WALK_SPEED) {
+#else
   if(dirsign != 0 && fabs(vx) < WALK_SPEED) {
+#endif
     vx = dirsign * WALK_SPEED;
   }
 
   // changing directions?
   if(on_ground() && ((vx < 0 && dirsign >0) || (vx>0 && dirsign<0))) {
+#ifdef __DREAMCAST__
+      if(MATH_fabs(vx)>SKID_XM && !skidding_timer.check()) {
+#else
       if(fabs(vx)>SKID_XM && !skidding_timer.check()) {
+#endif
           skidding_timer.start(SKID_TIME);
           play_sound(sounds[SND_SKID], SOUND_CENTER_SPEAKER);
           ax *= 2.5;
@@ -346,7 +358,11 @@ Player::handle_horizontal_input()
 
   // we get slower when not pressing any keys
   if(dirsign == 0) {
+#ifdef __DREAMCAST__
+      if(MATH_fabs(vx) < WALK_SPEED) {
+#else
       if(fabs(vx) < WALK_SPEED) {
+#endif
           vx = 0;
           ax = 0;
       } else if(vx < 0) {
@@ -366,7 +382,11 @@ Player::handle_horizontal_input()
     // increasing 1 will increase acceleration/deceleration rate
     // decreasing 1 will decrease acceleration/deceleration rate
     //  must stay above zero, though
+#ifdef __DREAMCAST__
+    if (ax != 0) ax *= 1 / MATH_fabs(vx);
+#else
     if (ax != 0) ax *= 1 / fabs(vx);
+#endif
   }
 
   physic.set_velocity(vx, vy);
@@ -382,7 +402,11 @@ Player::handle_vertical_input()
       if (on_ground())
         {
           // jump higher if we are running
+#ifdef __DREAMCAST__
+          if (MATH_fabs(physic.get_velocity_x()) > MAX_WALK_XM)
+#else
           if (fabs(physic.get_velocity_x()) > MAX_WALK_XM)
+#endif
             physic.set_velocity_y(5.8);
           else
             physic.set_velocity_y(5.2);
@@ -587,7 +611,11 @@ Player::draw()
             }
           else
             {
+#ifdef __DREAMCAST__
+              if (MATH_fabs(physic.get_velocity_x()) < 1.0f) // standing
+#else
               if (fabsf(physic.get_velocity_x()) < 1.0f) // standing
+#endif
                 {
                   if (dir == RIGHT)
                     sprite->stand_right->draw( base.x - scroll_x, base.y);

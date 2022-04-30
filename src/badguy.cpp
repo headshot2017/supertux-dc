@@ -23,6 +23,10 @@
 #include <iostream>
 #include <math.h>
 
+#ifdef __DREAMCAST__
+#include <sh4_math.h>
+#endif
+
 #include "globals.h"
 #include "defines.h"
 #include "badguy.h"
@@ -519,8 +523,24 @@ BadGuy::action_flame(double frame_ratio)
 {
     static const float radius = 100;
     static const float speed = 0.02;
-    base.x = old_base.x + cos(base.ym) * radius;
-    base.y = old_base.y + sin(base.ym) * radius;
+
+#ifdef __DREAMCAST__
+  #if __GNUC__ <= GNUC_FSCA_ERROR_VERSION
+    RETURN_FSCA_STRUCT sine_cosine = MATH_fsca_Float_Rad(base.ym);
+    float cos_ym = sine_cosine.cosine;
+    float sin_ym = sine_cosine.sine;
+  #else
+    _Complex float sine_cosine = MATH_fsca_Float_Rad(base.ym);
+    float cos_ym = __imag__ sine_cosine;
+    float sin_ym = __real__ sine_cosine;
+  #endif
+#else
+    float cos_ym = cos(base.ym);
+    float sin_ym = sin(base.ym);
+#endif
+
+    base.x = old_base.x + cos_ym * radius;
+    base.y = old_base.y + sin_ym * radius;
 
     base.ym = fmodf(base.ym + frame_ratio * speed, 2*M_PI);
 }

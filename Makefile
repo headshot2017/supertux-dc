@@ -6,7 +6,7 @@
 # Put the filename of the output binary here
 TARGET = supertux.elf
 
-CXXFLAGS += -D__DREAMCAST__ -DNOOPENGL -I$(KOS_PORTS)/include -Iports/SDLDH1.0/include -Iports/fake_mixer -I$(KOS_BASE)/kernel/arch/dreamcast/include/dc -Iports/mikmod/lmikmod/include
+CXXFLAGS += -D__DREAMCAST__ -DNOOPENGL -I$(KOS_PORTS)/include -Iports/SDLDH1.0/include -Iports/fake_mixer -I$(KOS_BASE)/kernel/arch/dreamcast/include/dc -Iports/mikmod/lmikmod/include -Iports/dreamhal/inc
 
 # List all of your C files here, but change the extension to ".o"
 # Include "romdisk.o" if you want a rom disk.
