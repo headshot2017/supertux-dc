@@ -76,12 +76,16 @@ void message_dialog(Surface* bg, std::string text)
 
 	while(true)
 	{
+#ifndef __DREAMCAST__
 		SDL_Event event;
 
 		while (SDL_PollEvent(&event))
 		{
 			dialog->event(event);
 		}
+#else
+		dialog->DCevent();
+#endif
 
 		bg->draw(0,0);
 
@@ -115,12 +119,16 @@ bool confirm_dialog(std::string text)
 
   while(true)
   {
+#ifndef __DREAMCAST__
     SDL_Event event;
 
     while (SDL_PollEvent(&event))
     {
       dialog->event(event);
     }
+#else
+    dialog->DCevent();
+#endif
 
     cap_screen->draw(0,0);
 
